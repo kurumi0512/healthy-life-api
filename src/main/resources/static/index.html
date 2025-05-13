@@ -23,6 +23,13 @@
   <label>身高 (cm): <input type="number" id="height" value="170" /></label><br/><br/>
   <label>體重 (kg): <input type="number" id="weight" value="65" /></label><br/><br/>
   <label>年齡: <input type="number" id="age" value="25" /></label><br/><br/>
+  <label>目標: 
+	  <select id="goal">
+	  <option value="減重" selected>減重（瘦身）</option>
+	  <option value="增肌">增肌（增加肌肉）</option>
+	  <option value="維持">維持（保持現況）</option>
+</select>
+  </label><br/><br/>
 
   <button onclick="startStream()">取得建議</button>
 
@@ -34,10 +41,11 @@
       const height = document.getElementById("height").value;
       const weight = document.getElementById("weight").value;
       const age = document.getElementById("age").value;
+      const goal = document.getElementById("goal").value;
       const output = document.getElementById("output");
       output.innerText = ""; // 清空上次結果
 
-      const url = `http://localhost:8082/health/advice-stream?height=${height}&weight=${weight}&age=${age}`;
+      const url = `http://localhost:8082/health/advice-stream?height=${height}&weight=${weight}&age=${age}&goal=${goal}`; 
       const eventSource = new EventSource(url);
 
       eventSource.onmessage = function(event) {
