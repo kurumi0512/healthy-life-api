@@ -1,10 +1,54 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Insert title here</title>
-	</head>
-	<body>
-		Healthy_system
-	</body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>健康建議測試</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #output {
+      white-space: pre-wrap;
+      border: 1px solid #ccc;
+      padding: 10px;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h1>健康建議測試</h1>
+
+  <label>身高 (cm): <input type="number" id="height" value="170" /></label><br/><br/>
+  <label>體重 (kg): <input type="number" id="weight" value="65" /></label><br/><br/>
+  <label>年齡: <input type="number" id="age" value="25" /></label><br/><br/>
+
+  <button onclick="startStream()">取得建議</button>
+
+  <h2>AI 建議</h2>
+  <div id="output"></div>
+
+  <script>
+    function startStream() {
+      const height = document.getElementById("height").value;
+      const weight = document.getElementById("weight").value;
+      const age = document.getElementById("age").value;
+      const output = document.getElementById("output");
+      output.innerText = ""; // 清空上次結果
+
+      const url = `http://localhost:8082/health/advice-stream?height=${height}&weight=${weight}&age=${age}`;
+      const eventSource = new EventSource(url);
+
+      eventSource.onmessage = function(event) {
+        output.innerText += event.data;
+      };
+
+      eventSource.onerror = function(error) {
+        console.error("串流發生錯誤", error);
+        eventSource.close();
+      };
+    }
+  </script>
+</body>
 </html>
