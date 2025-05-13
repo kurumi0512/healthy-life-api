@@ -30,33 +30,33 @@
 	  <option value="維持">維持（保持現況）</option>
 </select>
   </label><br/><br/>
+	
+	<button onclick="startStream()">取得建議</button>
 
-  <button onclick="startStream()">取得建議</button>
+	 <h2>AI 建議</h2>
+	  <div id="output"></div>
 
-  <h2>AI 建議</h2>
-  <div id="output"></div>
-
-  <script>
-    function startStream() {
-      const height = document.getElementById("height").value;
-      const weight = document.getElementById("weight").value;
-      const age = document.getElementById("age").value;
-      const goal = document.getElementById("goal").value;
-      const output = document.getElementById("output");
-      output.innerText = ""; // 清空上次結果
-
-      const url = `http://localhost:8082/health/advice-stream?height=${height}&weight=${weight}&age=${age}&goal=${goal}`; 
-      const eventSource = new EventSource(url);
-
-      eventSource.onmessage = function(event) {
-        output.innerText += event.data;
-      };
-
-      eventSource.onerror = function(error) {
-        console.error("串流發生錯誤", error);
-        eventSource.close();
-      };
-    }
-  </script>
+  	<script>
+	    function startStream() {
+	      const height = document.getElementById("height").value;
+	      const weight = document.getElementById("weight").value;
+	      const age = document.getElementById("age").value;
+	      const goal = document.getElementById("goal").value;
+	      const output = document.getElementById("output");
+	      output.innerText = ""; // 清空上次結果
+	
+	      const url = `http://localhost:8082/health/advice-stream?height=${height}&weight=${weight}&age=${age}&goal=${goal}`; 
+	      const eventSource = new EventSource(url);
+	
+	      eventSource.onmessage = function(event) {
+	        output.innerText += event.data;
+	      };
+	
+	      eventSource.onerror = function(error) {
+	        console.error("串流發生錯誤", error);
+	        eventSource.close();
+	      };
+	    }
+  	</script>
 </body>
 </html>
