@@ -27,15 +27,17 @@ public class HealthStreamController {
 		double bmi = weight / (heightMeter * heightMeter);
 
 		String prompt = String.format("""
+				你是一位健康建議助理，請直接以繁體中文回覆下列內容，**禁止輸出任何 <think> 或思考過程的內容。**
+
 				使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f，目標：%s。
 
 				請提供簡潔明確的「飲食建議」與「運動建議」，用條列式清楚說明：
+
 				- 根據 BMI 給出每日建議攝取熱量（大卡）區間
 				- 加入每日建議飲水量（毫升）
 				- 請簡化內容，總字數請壓在 500 字以內
-				- 回覆請使用「繁體中文」
-				- 不用回覆 <think> 的內容
-				- 回覆格式請使用 Markdown，包含適當的標題與子標題
+				- 回覆請使用 Markdown 格式
+				- 不要包含任何 <think> 或思考文字，只輸出建議內容
 				""", age, height, weight, bmi, goal);
 
 		SseEmitter emitter = new SseEmitter(0L);
