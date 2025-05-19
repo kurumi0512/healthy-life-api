@@ -32,6 +32,12 @@
 	
 	<dependencies>
 		
+		
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
 		<!-- Model Mapper DTO 與 Entity 互轉 -->
 	    <dependency>
 	        <groupId>org.modelmapper</groupId>
@@ -40,10 +46,10 @@
 	    </dependency>
 			
 	    <!-- JdbcTemplate (JDBC 豪華昇級版)  -->
-	    <dependency>
+	   <!-- <dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-data-jdbc</artifactId>
-	    </dependency>
+	    </dependency>-->
 			
 	    <!-- MySQL Driver -->
 	    <dependency>
@@ -90,6 +96,16 @@
         	<groupId>org.springframework.ai</groupId>
         	<artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
     	</dependency>
+	    <!--<dependency>
+	    	<groupId>com.example</groupId>
+	    	<artifactId>springboot-jpa</artifactId>
+	    	<version>0.0.1-SNAPSHOT</version>
+	    </dependency>
+	    <dependency>
+	    	<groupId>JavaWebCart</groupId>
+	    	<artifactId>JavaWebCart</artifactId>
+	    	<version>0.0.1-SNAPSHOT</version>
+	    </dependency>-->
 	</dependencies>
 
 	<dependencyManagement>
