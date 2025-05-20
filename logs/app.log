@@ -874,3 +874,542 @@ Caused by: org.hibernate.HibernateException: Unable to determine Dialect without
 2025-05-20T12:25:23.265+08:00  INFO 6836 --- [healthy-life-api] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2025-05-20T12:25:23.266+08:00  INFO 6836 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-05-20T12:25:23.266+08:00  INFO 6836 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-05-20T13:38:35.948+08:00  INFO 6836 --- [healthy-life-api] [RMI TCP Connection(132)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T13:38:35.949+08:00  INFO 6836 --- [healthy-life-api] [RMI TCP Connection(132)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T13:38:35.952+08:00  INFO 6836 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T13:38:35.954+08:00  INFO 6836 --- [healthy-life-api] [RMI TCP Connection(132)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T13:38:35.955+08:00  INFO 6836 --- [healthy-life-api] [RMI TCP Connection(132)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T13:38:35.956+08:00  INFO 6836 --- [healthy-life-api] [RMI TCP Connection(132)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T13:38:37.280+08:00  INFO 14152 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 14152 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T13:38:37.281+08:00  INFO 14152 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T13:38:37.558+08:00  INFO 14152 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T13:38:37.633+08:00  INFO 14152 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 69 ms. Found 1 JPA repository interface.
+2025-05-20T13:38:38.004+08:00  INFO 14152 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T13:38:38.013+08:00  INFO 14152 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T13:38:38.013+08:00  INFO 14152 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T13:38:38.119+08:00  INFO 14152 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T13:38:38.122+08:00  INFO 14152 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T13:38:38.123+08:00  INFO 14152 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 815 ms
+2025-05-20T13:38:38.204+08:00  INFO 14152 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T13:38:38.231+08:00  INFO 14152 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T13:38:38.253+08:00  INFO 14152 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T13:38:38.399+08:00  INFO 14152 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T13:38:38.416+08:00  INFO 14152 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T13:38:38.503+08:00  INFO 14152 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@15a484a9
+2025-05-20T13:38:38.504+08:00  INFO 14152 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T13:38:38.547+08:00  INFO 14152 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T13:38:38.969+08:00  INFO 14152 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T13:38:38.995+08:00  INFO 14152 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T13:38:39.413+08:00  WARN 14152 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T13:38:39.424+08:00  INFO 14152 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T13:38:39.584+08:00  INFO 14152 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T13:38:39.589+08:00  INFO 14152 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 2.522 seconds (process running for 2.832)
+2025-05-20T13:40:19.795+08:00  INFO 14152 --- [healthy-life-api] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T13:40:19.795+08:00  INFO 14152 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T13:40:19.796+08:00  INFO 14152 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-05-20T16:01:50.229+08:00  INFO 14152 --- [healthy-life-api] [RMI TCP Connection(152)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T16:01:50.230+08:00  INFO 14152 --- [healthy-life-api] [RMI TCP Connection(152)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T16:01:50.233+08:00  INFO 14152 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T16:01:50.235+08:00  INFO 14152 --- [healthy-life-api] [RMI TCP Connection(152)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:01:50.236+08:00  INFO 14152 --- [healthy-life-api] [RMI TCP Connection(152)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:01:50.237+08:00  INFO 14152 --- [healthy-life-api] [RMI TCP Connection(152)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:24:05.270+08:00  INFO 19212 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 19212 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:24:05.271+08:00  INFO 19212 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:24:05.571+08:00  INFO 19212 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:24:05.648+08:00  INFO 19212 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 70 ms. Found 1 JPA repository interface.
+2025-05-20T16:24:06.047+08:00  INFO 19212 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:24:06.059+08:00  INFO 19212 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:24:06.059+08:00  INFO 19212 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:24:06.181+08:00  INFO 19212 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:24:06.184+08:00  INFO 19212 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:24:06.184+08:00  INFO 19212 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 886 ms
+2025-05-20T16:24:06.270+08:00  INFO 19212 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:24:06.297+08:00  INFO 19212 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:24:06.321+08:00  INFO 19212 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:24:06.487+08:00  INFO 19212 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:24:06.504+08:00  INFO 19212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:24:06.598+08:00  INFO 19212 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3d3b272a
+2025-05-20T16:24:06.599+08:00  INFO 19212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:24:06.643+08:00  INFO 19212 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:24:06.724+08:00 ERROR 19212 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+2025-05-20T16:24:06.724+08:00  WARN 19212 --- [healthy-life-api] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+2025-05-20T16:24:06.725+08:00  INFO 19212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:24:06.753+08:00  INFO 19212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:24:06.755+08:00  INFO 19212 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-05-20T16:24:06.761+08:00  INFO 19212 --- [healthy-life-api] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-05-20T16:24:06.770+08:00 ERROR 19212 --- [healthy-life-api] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1818) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970) ~[spring-context-6.2.6.jar:6.2.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.6.jar:6.2.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:753) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1362) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1351) ~[spring-boot-3.4.5.jar:3.4.5]
+	at com.example.demo.HealthyLifeApiApplication.main(HealthyLifeApiApplication.java:15) ~[classes/:na]
+Caused by: org.hibernate.AnnotationException: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+	at org.hibernate.boot.model.internal.InheritanceState.determineDefaultAccessType(InheritanceState.java:289) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.InheritanceState.getElementsToProcess(InheritanceState.java:226) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.InheritanceState.postProcess(InheritanceState.java:162) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.EntityBinder.handleIdentifier(EntityBinder.java:410) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.EntityBinder.bindEntityClass(EntityBinder.java:251) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.AnnotationBinder.bindClass(AnnotationBinder.java:401) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.source.internal.annotations.AnnotationMetadataSourceProcessorImpl.processEntityHierarchies(AnnotationMetadataSourceProcessorImpl.java:257) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess$1.processEntityHierarchies(MetadataBuildingProcess.java:281) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:324) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1442) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1513) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1865) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1814) ~[spring-beans-6.2.6.jar:6.2.6]
+	... 15 common frames omitted
+
+2025-05-20T16:26:34.846+08:00  INFO 17296 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 17296 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:26:34.847+08:00  INFO 17296 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:26:35.123+08:00  INFO 17296 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:26:35.198+08:00  INFO 17296 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 69 ms. Found 1 JPA repository interface.
+2025-05-20T16:26:35.572+08:00  INFO 17296 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:26:35.581+08:00  INFO 17296 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:26:35.581+08:00  INFO 17296 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:26:35.689+08:00  INFO 17296 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:26:35.692+08:00  INFO 17296 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:26:35.693+08:00  INFO 17296 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 820 ms
+2025-05-20T16:26:35.774+08:00  INFO 17296 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:26:35.802+08:00  INFO 17296 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:26:35.826+08:00  INFO 17296 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:26:35.971+08:00  INFO 17296 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:26:35.987+08:00  INFO 17296 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:26:36.074+08:00  INFO 17296 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3359c3f6
+2025-05-20T16:26:36.075+08:00  INFO 17296 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:26:36.118+08:00  INFO 17296 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:26:36.195+08:00 ERROR 17296 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+2025-05-20T16:26:36.196+08:00  WARN 17296 --- [healthy-life-api] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+2025-05-20T16:26:36.196+08:00  INFO 17296 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:26:36.233+08:00  INFO 17296 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:26:36.234+08:00  INFO 17296 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-05-20T16:26:36.240+08:00  INFO 17296 --- [healthy-life-api] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-05-20T16:26:36.251+08:00 ERROR 17296 --- [healthy-life-api] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1818) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970) ~[spring-context-6.2.6.jar:6.2.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.6.jar:6.2.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:753) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1362) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1351) ~[spring-boot-3.4.5.jar:3.4.5]
+	at com.example.demo.HealthyLifeApiApplication.main(HealthyLifeApiApplication.java:15) ~[classes/:na]
+Caused by: org.hibernate.AnnotationException: Entity 'com.example.demo.model.entity.AdviceHistory' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+	at org.hibernate.boot.model.internal.InheritanceState.determineDefaultAccessType(InheritanceState.java:289) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.InheritanceState.getElementsToProcess(InheritanceState.java:226) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.InheritanceState.postProcess(InheritanceState.java:162) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.EntityBinder.handleIdentifier(EntityBinder.java:410) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.EntityBinder.bindEntityClass(EntityBinder.java:251) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.AnnotationBinder.bindClass(AnnotationBinder.java:401) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.source.internal.annotations.AnnotationMetadataSourceProcessorImpl.processEntityHierarchies(AnnotationMetadataSourceProcessorImpl.java:257) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess$1.processEntityHierarchies(MetadataBuildingProcess.java:281) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:324) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1442) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1513) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1865) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1814) ~[spring-beans-6.2.6.jar:6.2.6]
+	... 15 common frames omitted
+
+2025-05-20T16:29:14.889+08:00  INFO 17212 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 17212 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:29:14.890+08:00  INFO 17212 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:29:15.163+08:00  INFO 17212 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:29:15.238+08:00  INFO 17212 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 69 ms. Found 1 JPA repository interface.
+2025-05-20T16:29:15.610+08:00  INFO 17212 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:29:15.619+08:00  INFO 17212 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:29:15.619+08:00  INFO 17212 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:29:15.726+08:00  INFO 17212 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:29:15.729+08:00  INFO 17212 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:29:15.730+08:00  INFO 17212 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 814 ms
+2025-05-20T16:29:15.811+08:00  INFO 17212 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:29:15.837+08:00  INFO 17212 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:29:15.860+08:00  INFO 17212 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:29:16.011+08:00  INFO 17212 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:29:16.028+08:00  INFO 17212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:29:16.116+08:00  INFO 17212 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@19d3f6ad
+2025-05-20T16:29:16.117+08:00  INFO 17212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:29:16.163+08:00  INFO 17212 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:29:16.247+08:00 ERROR 17212 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: Entity 'com.example.demo.model.entity.BloodPressureRecord' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+2025-05-20T16:29:16.248+08:00  WARN 17212 --- [healthy-life-api] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Entity 'com.example.demo.model.entity.BloodPressureRecord' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+2025-05-20T16:29:16.248+08:00  INFO 17212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:29:16.274+08:00  INFO 17212 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:29:16.276+08:00  INFO 17212 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-05-20T16:29:16.282+08:00  INFO 17212 --- [healthy-life-api] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-05-20T16:29:16.294+08:00 ERROR 17212 --- [healthy-life-api] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Entity 'com.example.demo.model.entity.BloodPressureRecord' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1818) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970) ~[spring-context-6.2.6.jar:6.2.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.6.jar:6.2.6]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:753) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1362) ~[spring-boot-3.4.5.jar:3.4.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1351) ~[spring-boot-3.4.5.jar:3.4.5]
+	at com.example.demo.HealthyLifeApiApplication.main(HealthyLifeApiApplication.java:15) ~[classes/:na]
+Caused by: org.hibernate.AnnotationException: Entity 'com.example.demo.model.entity.BloodPressureRecord' has no identifier (every '@Entity' class must declare or inherit at least one '@Id' or '@EmbeddedId' property)
+	at org.hibernate.boot.model.internal.InheritanceState.determineDefaultAccessType(InheritanceState.java:289) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.InheritanceState.getElementsToProcess(InheritanceState.java:226) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.InheritanceState.postProcess(InheritanceState.java:162) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.EntityBinder.handleIdentifier(EntityBinder.java:410) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.EntityBinder.bindEntityClass(EntityBinder.java:251) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.internal.AnnotationBinder.bindClass(AnnotationBinder.java:401) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.source.internal.annotations.AnnotationMetadataSourceProcessorImpl.processEntityHierarchies(AnnotationMetadataSourceProcessorImpl.java:257) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess$1.processEntityHierarchies(MetadataBuildingProcess.java:281) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:324) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1442) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1513) ~[hibernate-core-6.6.13.Final.jar:6.6.13.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1865) ~[spring-beans-6.2.6.jar:6.2.6]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1814) ~[spring-beans-6.2.6.jar:6.2.6]
+	... 15 common frames omitted
+
+2025-05-20T16:32:03.411+08:00  INFO 18816 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 18816 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:32:03.413+08:00  INFO 18816 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:32:03.688+08:00  INFO 18816 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:32:03.764+08:00  INFO 18816 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 70 ms. Found 1 JPA repository interface.
+2025-05-20T16:32:04.135+08:00  INFO 18816 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:32:04.143+08:00  INFO 18816 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:32:04.144+08:00  INFO 18816 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:32:04.254+08:00  INFO 18816 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:32:04.258+08:00  INFO 18816 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:32:04.258+08:00  INFO 18816 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 819 ms
+2025-05-20T16:32:04.338+08:00  INFO 18816 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:32:04.365+08:00  INFO 18816 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:32:04.390+08:00  INFO 18816 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:32:04.536+08:00  INFO 18816 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:32:04.552+08:00  INFO 18816 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:32:04.637+08:00  INFO 18816 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@556aed22
+2025-05-20T16:32:04.638+08:00  INFO 18816 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:32:04.682+08:00  INFO 18816 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:32:05.177+08:00  INFO 18816 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T16:32:05.753+08:00  INFO 18816 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:32:06.151+08:00  WARN 18816 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T16:32:06.162+08:00  INFO 18816 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T16:32:06.330+08:00  INFO 18816 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T16:32:06.335+08:00  INFO 18816 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 3.14 seconds (process running for 3.446)
+2025-05-20T16:32:11.931+08:00  INFO 18816 --- [healthy-life-api] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T16:32:11.931+08:00  INFO 18816 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T16:32:11.932+08:00  INFO 18816 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-05-20T16:37:50.625+08:00  INFO 18816 --- [healthy-life-api] [RMI TCP Connection(15)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T16:37:50.626+08:00  INFO 18816 --- [healthy-life-api] [RMI TCP Connection(15)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T16:37:50.628+08:00  INFO 18816 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T16:37:50.630+08:00  INFO 18816 --- [healthy-life-api] [RMI TCP Connection(15)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:37:50.631+08:00  INFO 18816 --- [healthy-life-api] [RMI TCP Connection(15)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:37:50.635+08:00  INFO 18816 --- [healthy-life-api] [RMI TCP Connection(15)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:37:51.984+08:00  INFO 17936 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 17936 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:37:51.985+08:00  INFO 17936 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:37:52.309+08:00  INFO 17936 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:37:52.402+08:00  INFO 17936 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 86 ms. Found 1 JPA repository interface.
+2025-05-20T16:37:52.840+08:00  INFO 17936 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:37:52.848+08:00  INFO 17936 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:37:52.849+08:00  INFO 17936 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:37:52.958+08:00  INFO 17936 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:37:52.962+08:00  INFO 17936 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:37:52.962+08:00  INFO 17936 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 944 ms
+2025-05-20T16:37:53.041+08:00  INFO 17936 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:37:53.067+08:00  INFO 17936 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:37:53.091+08:00  INFO 17936 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:37:53.232+08:00  INFO 17936 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:37:53.248+08:00  INFO 17936 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:37:53.334+08:00  INFO 17936 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@19d3f6ad
+2025-05-20T16:37:53.336+08:00  INFO 17936 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:37:53.378+08:00  INFO 17936 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:37:53.868+08:00  INFO 17936 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T16:37:53.914+08:00  INFO 17936 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:37:54.274+08:00  WARN 17936 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T16:37:54.285+08:00  INFO 17936 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T16:37:54.441+08:00  INFO 17936 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T16:37:54.446+08:00  INFO 17936 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 2.705 seconds (process running for 3.031)
+2025-05-20T16:37:56.675+08:00  INFO 17936 --- [healthy-life-api] [http-nio-8082-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T16:37:56.676+08:00  INFO 17936 --- [healthy-life-api] [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T16:37:56.676+08:00  INFO 17936 --- [healthy-life-api] [http-nio-8082-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-05-20T16:38:14.654+08:00  INFO 17936 --- [healthy-life-api] [RMI TCP Connection(6)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T16:38:14.656+08:00  INFO 17936 --- [healthy-life-api] [RMI TCP Connection(6)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T16:38:14.658+08:00  INFO 17936 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T16:38:14.660+08:00  INFO 17936 --- [healthy-life-api] [RMI TCP Connection(6)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:38:14.661+08:00  INFO 17936 --- [healthy-life-api] [RMI TCP Connection(6)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:38:14.664+08:00  INFO 17936 --- [healthy-life-api] [RMI TCP Connection(6)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:38:15.976+08:00  INFO 10456 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 10456 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:38:15.977+08:00  INFO 10456 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:38:16.248+08:00  INFO 10456 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:38:16.321+08:00  INFO 10456 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 67 ms. Found 1 JPA repository interface.
+2025-05-20T16:38:16.694+08:00  INFO 10456 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:38:16.703+08:00  INFO 10456 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:38:16.703+08:00  INFO 10456 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:38:16.812+08:00  INFO 10456 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:38:16.815+08:00  INFO 10456 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:38:16.816+08:00  INFO 10456 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 814 ms
+2025-05-20T16:38:16.893+08:00  INFO 10456 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:38:16.920+08:00  INFO 10456 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:38:16.943+08:00  INFO 10456 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:38:17.083+08:00  INFO 10456 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:38:17.100+08:00  INFO 10456 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:38:17.186+08:00  INFO 10456 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3d3b272a
+2025-05-20T16:38:17.187+08:00  INFO 10456 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:38:17.230+08:00  INFO 10456 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:38:17.728+08:00  INFO 10456 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T16:38:17.774+08:00  INFO 10456 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:38:18.133+08:00  WARN 10456 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T16:38:18.143+08:00  INFO 10456 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T16:38:18.302+08:00  INFO 10456 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T16:38:18.307+08:00  INFO 10456 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 2.541 seconds (process running for 2.851)
+2025-05-20T16:38:20.870+08:00  INFO 10456 --- [healthy-life-api] [http-nio-8082-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T16:38:20.870+08:00  INFO 10456 --- [healthy-life-api] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T16:38:20.871+08:00  INFO 10456 --- [healthy-life-api] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-05-20T16:38:32.486+08:00  INFO 10456 --- [healthy-life-api] [RMI TCP Connection(2)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T16:38:32.488+08:00  INFO 10456 --- [healthy-life-api] [RMI TCP Connection(2)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T16:38:32.491+08:00  INFO 10456 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T16:38:32.494+08:00  INFO 10456 --- [healthy-life-api] [RMI TCP Connection(2)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:38:32.496+08:00  INFO 10456 --- [healthy-life-api] [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:38:32.502+08:00  INFO 10456 --- [healthy-life-api] [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:38:33.810+08:00  INFO 7152 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 7152 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:38:33.811+08:00  INFO 7152 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:38:34.083+08:00  INFO 7152 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:38:34.156+08:00  INFO 7152 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 68 ms. Found 1 JPA repository interface.
+2025-05-20T16:38:34.523+08:00  INFO 7152 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:38:34.531+08:00  INFO 7152 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:38:34.531+08:00  INFO 7152 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:38:34.640+08:00  INFO 7152 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:38:34.644+08:00  INFO 7152 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:38:34.644+08:00  INFO 7152 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 808 ms
+2025-05-20T16:38:34.723+08:00  INFO 7152 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:38:34.754+08:00  INFO 7152 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:38:34.778+08:00  INFO 7152 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:38:34.919+08:00  INFO 7152 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:38:34.935+08:00  INFO 7152 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:38:35.019+08:00  INFO 7152 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5ad40184
+2025-05-20T16:38:35.021+08:00  INFO 7152 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:38:35.063+08:00  INFO 7152 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:38:35.545+08:00  INFO 7152 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T16:38:35.590+08:00  INFO 7152 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:38:35.952+08:00  WARN 7152 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T16:38:35.963+08:00  INFO 7152 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T16:38:36.120+08:00  INFO 7152 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T16:38:36.125+08:00  INFO 7152 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 2.527 seconds (process running for 2.84)
+2025-05-20T16:38:39.061+08:00  INFO 7152 --- [healthy-life-api] [http-nio-8082-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T16:38:39.061+08:00  INFO 7152 --- [healthy-life-api] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T16:38:39.061+08:00  INFO 7152 --- [healthy-life-api] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-05-20T16:50:38.740+08:00  INFO 7152 --- [healthy-life-api] [RMI TCP Connection(21)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T16:50:38.742+08:00  INFO 7152 --- [healthy-life-api] [RMI TCP Connection(21)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T16:50:38.744+08:00  INFO 7152 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T16:50:38.747+08:00  INFO 7152 --- [healthy-life-api] [RMI TCP Connection(21)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:50:38.748+08:00  INFO 7152 --- [healthy-life-api] [RMI TCP Connection(21)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T16:50:38.752+08:00  INFO 7152 --- [healthy-life-api] [RMI TCP Connection(21)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T16:50:40.188+08:00  INFO 11116 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 11116 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T16:50:40.189+08:00  INFO 11116 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T16:50:40.543+08:00  INFO 11116 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T16:50:40.649+08:00  INFO 11116 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 99 ms. Found 1 JPA repository interface.
+2025-05-20T16:50:41.106+08:00  INFO 11116 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T16:50:41.116+08:00  INFO 11116 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T16:50:41.116+08:00  INFO 11116 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T16:50:41.237+08:00  INFO 11116 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T16:50:41.242+08:00  INFO 11116 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T16:50:41.242+08:00  INFO 11116 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1021 ms
+2025-05-20T16:50:41.337+08:00  INFO 11116 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T16:50:41.383+08:00  INFO 11116 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T16:50:41.416+08:00  INFO 11116 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T16:50:41.593+08:00  INFO 11116 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T16:50:41.617+08:00  INFO 11116 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T16:50:41.712+08:00  INFO 11116 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@9cc0505
+2025-05-20T16:50:41.713+08:00  INFO 11116 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T16:50:41.765+08:00  INFO 11116 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T16:50:42.346+08:00  INFO 11116 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T16:50:42.395+08:00  INFO 11116 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T16:50:42.786+08:00  WARN 11116 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T16:50:42.804+08:00  INFO 11116 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T16:50:42.991+08:00  INFO 11116 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T16:50:42.996+08:00  INFO 11116 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 3.061 seconds (process running for 3.433)
+2025-05-20T16:50:49.955+08:00  INFO 11116 --- [healthy-life-api] [http-nio-8082-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T16:50:49.955+08:00  INFO 11116 --- [healthy-life-api] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T16:50:49.956+08:00  INFO 11116 --- [healthy-life-api] [http-nio-8082-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-05-20T17:04:42.069+08:00  INFO 11116 --- [healthy-life-api] [RMI TCP Connection(23)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T17:04:42.070+08:00  INFO 11116 --- [healthy-life-api] [RMI TCP Connection(23)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T17:04:42.080+08:00  INFO 11116 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T17:04:42.082+08:00  INFO 11116 --- [healthy-life-api] [RMI TCP Connection(23)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T17:04:42.083+08:00  INFO 11116 --- [healthy-life-api] [RMI TCP Connection(23)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T17:04:42.086+08:00  INFO 11116 --- [healthy-life-api] [RMI TCP Connection(23)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T17:04:43.386+08:00  INFO 17256 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 17256 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T17:04:43.387+08:00  INFO 17256 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T17:04:43.660+08:00  INFO 17256 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T17:04:43.733+08:00  INFO 17256 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 68 ms. Found 1 JPA repository interface.
+2025-05-20T17:04:44.098+08:00  INFO 17256 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T17:04:44.106+08:00  INFO 17256 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T17:04:44.107+08:00  INFO 17256 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T17:04:44.213+08:00  INFO 17256 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T17:04:44.216+08:00  INFO 17256 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T17:04:44.217+08:00  INFO 17256 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 805 ms
+2025-05-20T17:04:44.301+08:00  INFO 17256 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T17:04:44.328+08:00  INFO 17256 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T17:04:44.350+08:00  INFO 17256 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T17:04:44.493+08:00  INFO 17256 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T17:04:44.510+08:00  INFO 17256 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T17:04:44.595+08:00  INFO 17256 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@19e801b5
+2025-05-20T17:04:44.596+08:00  INFO 17256 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T17:04:44.639+08:00  INFO 17256 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T17:04:45.121+08:00  INFO 17256 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T17:04:45.169+08:00  INFO 17256 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T17:04:45.533+08:00  WARN 17256 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T17:04:45.543+08:00  INFO 17256 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T17:04:45.704+08:00  INFO 17256 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T17:04:45.709+08:00  INFO 17256 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 2.534 seconds (process running for 2.842)
+2025-05-20T17:04:50.895+08:00  INFO 17256 --- [healthy-life-api] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T17:04:50.895+08:00  INFO 17256 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T17:04:50.896+08:00  INFO 17256 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-05-20T17:09:37.680+08:00  INFO 17256 --- [healthy-life-api] [RMI TCP Connection(14)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-05-20T17:09:37.680+08:00  INFO 17256 --- [healthy-life-api] [RMI TCP Connection(14)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-20T17:09:37.687+08:00  INFO 17256 --- [healthy-life-api] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-20T17:09:37.689+08:00  INFO 17256 --- [healthy-life-api] [RMI TCP Connection(14)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T17:09:37.690+08:00  INFO 17256 --- [healthy-life-api] [RMI TCP Connection(14)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-20T17:09:37.693+08:00  INFO 17256 --- [healthy-life-api] [RMI TCP Connection(14)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-20T17:09:39.007+08:00  INFO 17300 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Starting HealthyLifeApiApplication using Java 21.0.6 with PID 17300 (C:\Users\NTPU\eclipse-workspace2\healthy-life-api\target\classes started by NTPU in C:\Users\NTPU\eclipse-workspace2\healthy-life-api)
+2025-05-20T17:09:39.008+08:00  INFO 17300 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-05-20T17:09:39.296+08:00  INFO 17300 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-20T17:09:39.372+08:00  INFO 17300 --- [healthy-life-api] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 67 ms. Found 1 JPA repository interface.
+2025-05-20T17:09:39.737+08:00  INFO 17300 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2025-05-20T17:09:39.745+08:00  INFO 17300 --- [healthy-life-api] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-20T17:09:39.746+08:00  INFO 17300 --- [healthy-life-api] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.40]
+2025-05-20T17:09:39.853+08:00  INFO 17300 --- [healthy-life-api] [main] org.apache.jasper.servlet.TldScanner     : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2025-05-20T17:09:39.856+08:00  INFO 17300 --- [healthy-life-api] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-20T17:09:39.856+08:00  INFO 17300 --- [healthy-life-api] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 823 ms
+2025-05-20T17:09:39.933+08:00  INFO 17300 --- [healthy-life-api] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-20T17:09:39.958+08:00  INFO 17300 --- [healthy-life-api] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.13.Final
+2025-05-20T17:09:39.982+08:00  INFO 17300 --- [healthy-life-api] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-20T17:09:40.119+08:00  INFO 17300 --- [healthy-life-api] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-20T17:09:40.135+08:00  INFO 17300 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-20T17:09:40.219+08:00  INFO 17300 --- [healthy-life-api] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@45b27ad3
+2025-05-20T17:09:40.220+08:00  INFO 17300 --- [healthy-life-api] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-20T17:09:40.264+08:00  INFO 17300 --- [healthy-life-api] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.34
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-20T17:09:40.751+08:00  INFO 17300 --- [healthy-life-api] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-20T17:09:40.795+08:00  INFO 17300 --- [healthy-life-api] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-20T17:09:41.152+08:00  WARN 17300 --- [healthy-life-api] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-20T17:09:41.163+08:00  INFO 17300 --- [healthy-life-api] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-20T17:09:41.328+08:00  INFO 17300 --- [healthy-life-api] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2025-05-20T17:09:41.333+08:00  INFO 17300 --- [healthy-life-api] [main] c.e.demo.HealthyLifeApiApplication       : Started HealthyLifeApiApplication in 2.541 seconds (process running for 2.85)
+2025-05-20T17:10:44.868+08:00  INFO 17300 --- [healthy-life-api] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-20T17:10:44.868+08:00  INFO 17300 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-20T17:10:44.869+08:00  INFO 17300 --- [healthy-life-api] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms

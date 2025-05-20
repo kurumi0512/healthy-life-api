@@ -7,49 +7,36 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity
-@Table(name = "account")
-public class Account {
-
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	private String username;
+	@OneToOne
+	@JoinColumn(name = "account_id")
+	private Account account;
 
-	@Column(name = "hash_password")
-	private String hashPassword;
+	private String name;
+	private Integer age;
+	private String gender;
+	private String goal;
+	private Double targetWeight;
 
-	@Column(name = "hash_salt")
-	private String hashSalt;
-
-	private String email;
-	private Boolean completed;
+	@Column(name = "age_group")
+	private String ageGroup;
 
 	@Column(name = "create_time")
 	private LocalDateTime createTime;
-
-	@Column(name = "last_login")
-	private LocalDateTime lastLogin;
-
-	private String status;
-
-	@PrePersist
-	public void onCreate() {
-		this.createTime = LocalDateTime.now();
-	}
-
-	// getter / setter 省略，可用 Lombok 處理
-
 }

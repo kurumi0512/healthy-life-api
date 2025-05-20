@@ -15,6 +15,17 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private AccountRepository accountRepository;
 
+	public void activateAccount(String username) {
+		accountRepository.findByUsername(username).ifPresent(account -> {
+			account.setStatus("active");
+			accountRepository.save(account);
+		});
+	}
+
+	public boolean isUsernameTaken(String username) {
+		return accountRepository.findByUsername(username).isPresent();
+	}
+
 	@Override
 	public void register(String username, String password, String email) {
 		String salt = HashUtil.generateSalt();
@@ -32,8 +43,4 @@ public class AccountServiceImpl implements AccountService {
 		accountRepository.save(account);
 	}
 
-	@Override
-	public boolean isUsernameTaken(String username) {
-		return accountRepository.findByUsername(username).isPresent();
-	}
 }

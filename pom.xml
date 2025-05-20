@@ -44,6 +44,13 @@
 	        <artifactId>modelmapper</artifactId>
 	        <version>3.2.1</version>
 	    </dependency>
+	    
+	    <!-- JavaMail (Jakarta Mail) 支援寄信功能 -->
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>jakarta.mail</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
 			
 	    <!-- JdbcTemplate (JDBC 豪華昇級版)  -->
 	   <!-- <dependency>
