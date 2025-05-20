@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.dto.LoginResult;
+import com.example.demo.model.entity.Account;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.util.HashUtil;
 
@@ -12,17 +16,20 @@ public class AuthService {
 	@Autowired
 	private AccountRepository accountRepository;
 
-	public boolean validate(String username, String rawPassword) {
-		return accountRepository.findByUsername(username).map(account -> {
-			// 取出使用者的鹽與雜湊密碼
-			String dbSalt = account.getHashSalt();
-			String dbHashPassword = account.getHashPassword();
+	public LoginResult validate(String username, String rawPassword) {
+		Optional<Account> optAccount = accountRepository.findByUsername(username);
 
-			// 將使用者輸入的密碼 + salt 做 hash
-			String inputHash = HashUtil.hashPassword(rawPassword, dbSalt);
+		if (optAccount.isEmpty()) {
+			return new LoginResult(false, "帳號不存在", null, null, null);
+		}
 
-			// 比對結果
-			return inputHash.equals(dbHashPassword);
-		}).orElse(false);
+		Account account = optAccount.get();
+		String inputHash = HashUtil.hashPassword(rawPassword, account.getHashSalt());
+
+		if (!inputHash.equals(account.getHashPassword())) {
+			return new LoginResult(false, "密碼錯誤", null, null, null);
+		}
+
+		return new LoginResult(true, "登入成功", account.getId(), account.getUsername(), account.getEmail());
 	}
 }

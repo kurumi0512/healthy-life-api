@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.dto.LoginRequest;
+import com.example.demo.model.dto.LoginResult;
 import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.AuthService;
@@ -20,7 +21,7 @@ import com.example.demo.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/health")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AuthController {
 
@@ -35,12 +36,14 @@ public class AuthController {
 		String username = loginRequest.getUsername();
 		String password = loginRequest.getPassword();
 
-		boolean valid = authService.validate(username, password);
-		if (valid) {
-			session.setAttribute("user", username);
-			return ResponseEntity.ok(Map.of("message", "登入成功", "user", username));
+		LoginResult result = authService.validate(username, password);
+
+		if (result.isSuccess()) {
+			session.setAttribute("user", result.getUsername());
+			return ResponseEntity.ok(Map.of("message", result.getMessage(), "user", result.getUsername(), "id",
+					result.getId(), "email", result.getEmail()));
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "帳號或密碼錯誤"));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", result.getMessage()));
 		}
 	}
 
