@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.entity.Account;
+import com.example.demo.model.entity.User;
 import com.example.demo.repository.AccountRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.util.HashUtil;
 
 @Service
@@ -14,6 +16,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private AccountRepository accountRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	public void activateAccount(String username) {
 		accountRepository.findByUsername(username).ifPresent(account -> {
@@ -41,6 +46,12 @@ public class AccountServiceImpl implements AccountService {
 		account.setCreateTime(LocalDateTime.now());
 
 		accountRepository.save(account);
+
+		// ✅ 註冊完成後，自動建立 user 資料（先空白）
+		User user = new User();
+		user.setAccount(account);
+		user.setCreateTime(LocalDateTime.now());
+		userRepository.save(user); // 🔥 重點
 	}
 
 }

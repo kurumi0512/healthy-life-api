@@ -74,8 +74,8 @@ public class AuthController {
 		}
 
 		session.setAttribute("user", result.getUsername());
-		return ResponseEntity.ok(Map.of("message", result.getMessage(), "user", result.getUsername(), "id",
-				result.getId(), "email", result.getEmail()));
+		return ResponseEntity.ok(Map.of("message", result.getMessage(), "user",
+				Map.of("id", result.getId(), "username", result.getUsername(), "email", result.getEmail())));
 	}
 
 	@PostMapping("/logout")
