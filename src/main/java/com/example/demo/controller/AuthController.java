@@ -74,6 +74,7 @@ public class AuthController {
 		}
 
 		session.setAttribute("user", result.getUsername());
+		session.setAttribute("accountId", result.getId());
 		return ResponseEntity.ok(Map.of("message", result.getMessage(), "user",
 				Map.of("id", result.getId(), "username", result.getUsername(), "email", result.getEmail())));
 	}

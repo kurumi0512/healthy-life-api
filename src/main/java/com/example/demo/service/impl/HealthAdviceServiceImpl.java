@@ -1,8 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.service.HealthAdviceService;
 
 import jakarta.annotation.PostConstruct;
 
