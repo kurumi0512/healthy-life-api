@@ -93,9 +93,16 @@ public class AuthController {
 
 	@GetMapping("/user")
 	public ResponseEntity<?> currentUser(HttpSession session) {
-		String user = (String) session.getAttribute("user");
-		if (user != null) {
-			return ResponseEntity.ok(Map.of("user", user));
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		String username = (String) session.getAttribute("user");
+		String role = null;
+		UserCert cert = (UserCert) session.getAttribute("cert");
+		if (cert != null) {
+			role = cert.getRole();
+		}
+
+		if (accountId != null && username != null) {
+			return ResponseEntity.ok(Map.of("user", Map.of("username", username, "id", accountId, "role", role)));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "尚未登入"));
 		}
