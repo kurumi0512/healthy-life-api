@@ -21,13 +21,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 自動生成id
 	private Integer id;
 
 	@OneToOne
 	@JoinColumn(name = "account_id")
 	private Account account;
-
+	@Column(name = "name")
 	private String name;
 	private Integer age;
 	private String gender;

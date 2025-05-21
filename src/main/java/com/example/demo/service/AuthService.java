@@ -5,7 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.dto.LoginResult;
+import com.example.demo.exception.CertException;
+import com.example.demo.model.dto.UserCert;
 import com.example.demo.model.entity.Account;
 import com.example.demo.model.entity.User;
 import com.example.demo.repository.AccountRepository;
@@ -21,26 +22,34 @@ public class AuthService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public LoginResult validate(String username, String rawPassword) {
+	/**
+	 * 驗證帳號密碼，成功後回傳使用者憑證
+	 * 
+	 * @param username    使用者名稱
+	 * @param rawPassword 明文密碼
+	 * @return UserCert 登入後的憑證（userId, username, role）
+	 * @throws CertException 帳號或密碼錯誤
+	 */
+	public UserCert validate(String username, String rawPassword) throws CertException {
 		Optional<Account> optAccount = accountRepository.findByUsername(username);
-
 		if (optAccount.isEmpty()) {
-			return new LoginResult(false, "帳號不存在", null, null, null);
+			throw new CertException("帳號不存在");
 		}
 
 		Account account = optAccount.get();
 		String inputHash = HashUtil.hashPassword(rawPassword, account.getHashSalt());
 
 		if (!inputHash.equals(account.getHashPassword())) {
-			return new LoginResult(false, "密碼錯誤", null, null, null);
+			throw new CertException("密碼錯誤");
 		}
 
-		// ✅ 根據帳號查使用者
-		User user = userRepository.findByAccount(account);
+		// 🔧 改：允許 user 為 null，登入成功但提醒前端補資料
+		User user = userRepository.findByAccountId(account.getId()).orElse(null);
 
-		// ✅ 回傳包含使用者姓名
-		LoginResult result = new LoginResult(true, "登入成功", account.getId(), account.getUsername(), account.getEmail());
+		String name = user != null ? user.getName() : null;
+		String email = account.getEmail(); // Account 不會為 null
 
-		return result;
+		// ✅ 照樣登入，回傳憑證
+		return new UserCert(account.getId(), account.getUsername(), account.getRole().name(), name, email);
 	}
 }

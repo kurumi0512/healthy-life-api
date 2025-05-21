@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.net.URI;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exception.CertException;
 import com.example.demo.model.dto.LoginRequest;
-import com.example.demo.model.dto.LoginResult;
 import com.example.demo.model.dto.RegisterRequest;
+import com.example.demo.model.dto.UserCert;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.EmailService;
@@ -45,7 +47,7 @@ public class AuthController {
 
 		accountService.register(request.getUsername(), request.getPassword(), request.getEmail());
 
-		String confirmUrl = "http://localhost:5173/health/email/confirm?username=" + request.getUsername();
+		String confirmUrl = "http://localhost:8082/health/email/confirm?username=" + request.getUsername();
 		emailService.sendEmail(request.getEmail(), "請點擊驗證連結：" + confirmUrl);
 
 		return ResponseEntity.ok(Map.of("message", "註冊成功，請至信箱完成驗證"));
@@ -55,7 +57,8 @@ public class AuthController {
 	@GetMapping("/email/confirm")
 	public ResponseEntity<?> confirmEmail(@RequestParam String username) {
 		accountService.activateAccount(username);
-		return ResponseEntity.ok(Map.of("message", "驗證成功，帳號已啟用"));
+		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:5173/verify-success"))
+				.build();
 	}
 
 	// ✅ 登入時驗證 session 中的驗證碼
@@ -67,16 +70,19 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "驗證碼錯誤"));
 		}
 
-		LoginResult result = authService.validate(request.getUsername(), request.getPassword());
+		try {
+			UserCert cert = authService.validate(request.getUsername(), request.getPassword());
 
-		if (!result.isSuccess()) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", result.getMessage()));
+			session.setAttribute("cert", cert);
+			session.setAttribute("user", cert.getUsername());
+			session.setAttribute("accountId", cert.getAccountId()); // ✅ 這裡改了
+
+			return ResponseEntity.ok(Map.of("message", "登入成功", "user",
+					Map.of("id", cert.getAccountId(), "username", cert.getUsername(), "role", cert.getRole() // ✅ 加這一行
+					)));
+		} catch (CertException e) {
+			return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
 		}
-
-		session.setAttribute("user", result.getUsername());
-		session.setAttribute("accountId", result.getId());
-		return ResponseEntity.ok(Map.of("message", result.getMessage(), "user",
-				Map.of("id", result.getId(), "username", result.getUsername(), "email", result.getEmail())));
 	}
 
 	@PostMapping("/logout")
@@ -92,6 +98,18 @@ public class AuthController {
 			return ResponseEntity.ok(Map.of("user", user));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "尚未登入"));
+		}
+	}
+
+	@GetMapping("/check")
+	public Map<String, Object> checkLogin(HttpSession session) {
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		String username = (String) session.getAttribute("user");
+
+		if (accountId != null && username != null) {
+			return Map.of("loggedIn", true, "user", Map.of("accountId", accountId, "username", username));
+		} else {
+			return Map.of("loggedIn", false);
 		}
 	}
 }

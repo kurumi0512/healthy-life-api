@@ -2,8 +2,12 @@ package com.example.demo.model.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.model.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,6 +39,8 @@ public class Account {
 	private String hashSalt;
 
 	private String email;
+
+	@Column(nullable = false)
 	private Boolean completed;
 
 	@Column(name = "create_time")
@@ -43,13 +49,15 @@ public class Account {
 	@Column(name = "last_login")
 	private LocalDateTime lastLogin;
 
+	@Column(name = "status")
 	private String status;
+
+	@Enumerated(EnumType.STRING) // 存成 USER / ADMIN 字串
+	@Column(name = "role", nullable = false)
+	private Role role;
 
 	@PrePersist
 	public void onCreate() {
 		this.createTime = LocalDateTime.now();
 	}
-
-	// getter / setter 省略，可用 Lombok 處理
-
 }
