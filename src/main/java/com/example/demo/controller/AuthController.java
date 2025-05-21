@@ -25,7 +25,7 @@ import com.example.demo.service.EmailService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/health")
+@RequestMapping("/rest/health")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AuthController {
 

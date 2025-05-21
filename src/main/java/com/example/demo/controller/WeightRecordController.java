@@ -17,7 +17,7 @@ import com.example.demo.service.WeightRecordService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/rest/weight")
+@RequestMapping("/rest/health/weight")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class WeightRecordController {
 

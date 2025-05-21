@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class CaptchaController {
 
-	@GetMapping("/health/captcha")
+	@GetMapping("/rest/health/captcha")
 	public void getCaptcha(HttpServletResponse response, HttpSession session) throws IOException {
 		// 產生四位數驗證碼（1000~9999）
 		String code = String.valueOf(new Random().nextInt(9000) + 1000);

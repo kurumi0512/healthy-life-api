@@ -19,7 +19,7 @@ import com.example.demo.service.BloodSugarService;
 import com.example.demo.service.UserService;
 
 @RestController
-@RequestMapping("/api/blood-sugar")
+@RequestMapping("/rest/health/blood-sugar")
 public class BloodSugarController {
 
 	@Autowired

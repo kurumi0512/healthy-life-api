@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.example.demo.service.HealthAdviceService;
 
 @RestController
-@RequestMapping("/healthAI")
+@RequestMapping("/rest/health/healthAI")
 public class HealthStreamController {
 	@Autowired
 	private HealthAdviceService healthAdviceService;
