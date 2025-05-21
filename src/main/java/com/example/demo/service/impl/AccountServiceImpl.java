@@ -59,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
 		if (optional.isPresent()) {
 			Account account = optional.get();
 			account.setCompleted(true); // ✅ 標記為已完成驗證
-			account.setStatus("ACTIVE"); // ✅ 狀態改為有效
+			account.setStatus("active"); // ✅ 狀態改為有效
 			accountRepository.save(account);
 		} else {
 			throw new RuntimeException("查無帳號：" + username);
