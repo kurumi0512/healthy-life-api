@@ -51,7 +51,7 @@ public class AuthController {
 		session.setAttribute("user", request.getUsername());
 
 		// ✅ 建立驗證信的連結（可選）
-		String confirmUrl = "http://localhost:8082/health/email/confirm?username=" + request.getUsername();
+		String confirmUrl = "http://localhost:8082/rest/health/email/confirm?username=" + request.getUsername();
 		emailService.sendEmail(request.getEmail(), "請點擊驗證連結：" + confirmUrl);
 
 		// ✅ 回傳訊息（可以附上 session 狀態資料）
