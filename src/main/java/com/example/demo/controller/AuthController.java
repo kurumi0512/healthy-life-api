@@ -80,7 +80,7 @@ public class AuthController {
 	// ✅ 登入時驗證 session 中的驗證碼
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
-		String sessionCode = (String) session.getAttribute("captcha"); // 後端驗證碼
+		String sessionCode = (String) session.getAttribute("captcha");
 
 		if (sessionCode == null || !sessionCode.equalsIgnoreCase(request.getCaptcha())) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "驗證碼錯誤"));
@@ -91,11 +91,10 @@ public class AuthController {
 
 			session.setAttribute("cert", cert);
 			session.setAttribute("user", cert.getUsername());
-			session.setAttribute("accountId", cert.getAccountId()); // ✅ 這裡改了
+			session.setAttribute("accountId", cert.getAccountId());
 
-			return ResponseEntity.ok(Map.of("message", "登入成功", "user",
-					Map.of("id", cert.getAccountId(), "username", cert.getUsername(), "role", cert.getRole() // ✅ 加這一行
-					)));
+			// ✅ 直接把完整 cert 當作 user 傳給前端
+			return ResponseEntity.ok(Map.of("message", "登入成功", "user", cert));
 		} catch (CertException e) {
 			return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
 		}
@@ -109,16 +108,11 @@ public class AuthController {
 
 	@GetMapping("/user")
 	public ResponseEntity<?> currentUser(HttpSession session) {
-		Integer accountId = (Integer) session.getAttribute("accountId");
-		String username = (String) session.getAttribute("user");
-		String role = null;
 		UserCert cert = (UserCert) session.getAttribute("cert");
-		if (cert != null) {
-			role = cert.getRole();
-		}
 
-		if (accountId != null && username != null) {
-			return ResponseEntity.ok(Map.of("user", Map.of("username", username, "id", accountId, "role", role)));
+		if (cert != null) {
+			return ResponseEntity.ok(Map.of("user",
+					Map.of("username", cert.getUsername(), "id", cert.getAccountId(), "role", cert.getRole())));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "尚未登入"));
 		}

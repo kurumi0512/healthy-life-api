@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class AuthService {
 	 * 
 	 * @param username    使用者名稱
 	 * @param rawPassword 明文密碼
-	 * @return UserCert 登入後的憑證（userId, username, role）
+	 * @return UserCert 登入後的憑證
 	 * @throws CertException 帳號或密碼錯誤
 	 */
 	public UserCert validate(String username, String rawPassword) throws CertException {
@@ -43,13 +44,26 @@ public class AuthService {
 			throw new CertException("密碼錯誤");
 		}
 
-		// 🔧 改：允許 user 為 null，登入成功但提醒前端補資料
+		// ✅ 更新最後登入時間
+		account.setLastLogin(LocalDateTime.now());
+		accountRepository.save(account);
+
+		// ✅ 抓取對應 User 資料
 		User user = userRepository.findByAccountId(account.getId()).orElse(null);
 
-		String name = user != null ? user.getName() : null;
-		String email = account.getEmail(); // Account 不會為 null
+		// ✅ 封裝成 UserCert DTO 回傳
+		return toUserCert(account, user);
+	}
 
-		// ✅ 照樣登入，回傳憑證
-		return new UserCert(account.getId(), account.getUsername(), account.getRole().name(), name, email);
+	/**
+	 * 將 Account 與 User 資料轉換為 UserCert 憑證 DTO
+	 */
+	private UserCert toUserCert(Account account, User user) {
+		boolean userCompleted = user != null && user.getAge() != null && user.getGender() != null;
+
+		return new UserCert(account.getId(), account.getUsername(), account.getRole().name(),
+				user != null ? user.getName() : null, account.getEmail(), account.getCompleted(),
+				"ADMIN".equals(account.getRole().name()), userCompleted // ✅ 加入 userCompleted 欄位
+		);
 	}
 }

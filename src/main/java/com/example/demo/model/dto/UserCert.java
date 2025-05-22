@@ -11,7 +11,10 @@ import lombok.ToString;
 public class UserCert {
 	private Integer accountId;
 	private String username;
-	private String role;
-	private String name; // 來自 User 表
-	private String email; // 從 Account 表來
+	private String role; // "USER" / "ADMIN"
+	private String name; // 顯示用，來自 User 表
+	private String email; // 來自 Account 表
+	private boolean verified; // Account.completed，是否已驗證
+	private boolean admin; // role.equals("ADMIN")
+	private boolean userCompleted;
 }
