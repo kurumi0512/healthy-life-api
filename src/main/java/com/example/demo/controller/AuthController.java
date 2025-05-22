@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import com.example.demo.service.AuthService;
 import com.example.demo.service.EmailService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/rest/health")
@@ -39,23 +41,32 @@ public class AuthController {
 	private EmailService emailService;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody RegisterRequest request, HttpSession session) {
+	public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult,
+			HttpSession session) {
+
+		// ✅ 驗證格式錯誤
+		if (bindingResult.hasErrors()) {
+			String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+			return ResponseEntity.badRequest().body(Map.of("message", errorMessage));
+		}
+
+		// ✅ 檢查帳號是否已存在
 		if (accountService.isUsernameTaken(request.getUsername())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "帳號已存在"));
 		}
 
-		// 儲存帳號資料
+		// ✅ 儲存帳號資料
 		accountService.register(request.getUsername(), request.getPassword(), request.getEmail());
 
-		// ✅ 設定 session（模擬登入狀態）
+		// ✅ 設定 session（模擬登入）
 		session.setAttribute("user", request.getUsername());
 
-		// ✅ 建立驗證信的連結（可選）
+		// ✅ 發送驗證信
 		String confirmUrl = "http://localhost:8082/rest/health/email/confirm?username=" + request.getUsername();
 		emailService.sendEmail(request.getEmail(), "請點擊驗證連結：" + confirmUrl);
 
-		// ✅ 回傳訊息（可以附上 session 狀態資料）
-		return ResponseEntity.ok(Map.of("message", "註冊成功，已自動登入", "user", request.getUsername()));
+		// ✅ 回傳訊息與登入資料
+		return ResponseEntity.ok(Map.of("message", "註冊成功，請至信箱驗證帳號", "user", request.getUsername()));
 	}
 
 	// ✅ 修改為不依賴 Session 的 Email 驗證
