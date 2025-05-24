@@ -39,4 +39,8 @@ public class User {
 
 	@Column(name = "create_time")
 	private LocalDateTime createTime;
+
+	public Integer getAccountId() {
+		return account != null ? account.getId() : null;
+	}
 }

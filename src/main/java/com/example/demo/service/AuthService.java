@@ -49,7 +49,7 @@ public class AuthService {
 		accountRepository.save(account);
 
 		// ✅ 抓取對應 User 資料
-		User user = userRepository.findByAccountId(account.getId()).orElse(null);
+		User user = userRepository.findByAccount_Id(account.getId()).orElse(null);
 
 		// ✅ 封裝成 UserCert DTO 回傳
 		return toUserCert(account, user);

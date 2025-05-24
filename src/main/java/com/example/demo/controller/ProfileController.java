@@ -33,7 +33,7 @@ public class ProfileController {
 	public ResponseEntity<UserProfileDto> getProfile(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
 
-		User user = userRepository.findByAccountId(accountId).orElseThrow(() -> new RuntimeException("找不到個人資料"));
+		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("找不到個人資料"));
 		Account account = accountRepository.findById(accountId).orElseThrow(() -> new RuntimeException("找不到帳號資料"));
 
 		UserProfileDto dto = new UserProfileDto();
@@ -53,7 +53,7 @@ public class ProfileController {
 	public ResponseEntity<?> updateProfile(@RequestBody UserProfileDto dto, HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
 
-		User user = userRepository.findByAccountId(accountId).orElseThrow(() -> new RuntimeException("找不到個人資料"));
+		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("找不到個人資料"));
 
 		user.setName(dto.getName());
 		user.setAge(dto.getAge());

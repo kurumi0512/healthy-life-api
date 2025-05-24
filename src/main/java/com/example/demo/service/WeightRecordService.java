@@ -23,7 +23,7 @@ public class WeightRecordService {
 	private UserRepository userRepository;
 
 	public void saveRecord(WeightRecordDTO dto) {
-		User user = userRepository.findByAccountId(dto.getAccountId())
+		User user = userRepository.findByAccount_Id(dto.getAccountId())
 				.orElseThrow(() -> new RuntimeException("使用者不存在"));
 
 		WeightRecord record = new WeightRecord();
@@ -38,9 +38,55 @@ public class WeightRecordService {
 	}
 
 	public List<WeightRecordDTO> getRecordsByAccountId(Integer accountId) {
-		List<WeightRecord> records = weightRecordRepository.findByUser_AccountIdOrderByRecordDateAsc(accountId);
+		List<WeightRecord> records = weightRecordRepository.findByUser_Account_IdOrderByRecordDateAsc(accountId);
 		return records.stream().map(r -> {
 			WeightRecordDTO dto = new WeightRecordDTO();
+			dto.setAccountId(accountId);
+			dto.setWeight(r.getWeight());
+			dto.setHeight(r.getHeight());
+			dto.setAge(r.getAge());
+			dto.setBmi(r.getBmi());
+			dto.setRecordDate(r.getRecordDate().toString());
+			return dto;
+		}).collect(Collectors.toList());
+	}
+
+	public void updateRecord(WeightRecordDTO dto) {
+		WeightRecord record = weightRecordRepository.findById(dto.getRecordId())
+				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
+
+		if (!record.getUser().getAccountId().equals(dto.getAccountId())) {
+			throw new RuntimeException("無權修改此紀錄");
+		}
+
+		record.setWeight(dto.getWeight());
+		record.setHeight(dto.getHeight());
+		record.setAge(dto.getAge());
+		record.setBmi(dto.getBmi());
+		record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+
+		weightRecordRepository.save(record);
+	}
+
+	public void deleteRecord(Integer recordId, Integer accountId) {
+		WeightRecord record = weightRecordRepository.findById(recordId)
+				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
+
+		if (!record.getUser().getAccountId().equals(accountId)) {
+			throw new RuntimeException("無權刪除此紀錄");
+		}
+
+		weightRecordRepository.delete(record);
+	}
+
+	public List<WeightRecordDTO> getRecent7RecordsByAccountId(Integer accountId) {
+		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
+
+		List<WeightRecord> records = weightRecordRepository.findTop7ByUser_IdOrderByCreatedAtDesc(user.getId());
+
+		return records.stream().map(r -> {
+			WeightRecordDTO dto = new WeightRecordDTO();
+			dto.setRecordId(r.getId());
 			dto.setAccountId(accountId);
 			dto.setWeight(r.getWeight());
 			dto.setHeight(r.getHeight());

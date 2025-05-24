@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 			throw new RuntimeException("尚未登入");
 		}
 
-		return userRepository.findByAccountId(accountId).orElseThrow(() -> new RuntimeException("找不到使用者"));
+		return userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("找不到使用者"));
 	}
 
 	@Override

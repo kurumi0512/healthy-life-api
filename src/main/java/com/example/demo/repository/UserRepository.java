@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-	Optional<User> findByAccountId(Integer accountId);
+	Optional<User> findByAccount_Id(Integer accountId);
 }
