@@ -82,7 +82,7 @@ public class WeightRecordService {
 	public List<WeightRecordDTO> getRecent7RecordsByAccountId(Integer accountId) {
 		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
 
-		List<WeightRecord> records = weightRecordRepository.findTop7ByUser_IdOrderByCreatedAtDesc(user.getId());
+		List<WeightRecord> records = weightRecordRepository.findTop5ByUser_IdOrderByCreatedAtDesc(user.getId());
 
 		return records.stream().map(r -> {
 			WeightRecordDTO dto = new WeightRecordDTO();

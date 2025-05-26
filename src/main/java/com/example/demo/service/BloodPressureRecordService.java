@@ -38,7 +38,7 @@ public class BloodPressureRecordService {
 	public List<BloodPressureRecordDTO> getRecentRecords(Integer accountId) {
 		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
 
-		List<BloodPressureRecord> records = bpRecordRepository.findTop7ByUser_IdOrderByCreatedAtDesc(user.getId());
+		List<BloodPressureRecord> records = bpRecordRepository.findTop5ByUser_IdOrderByCreatedAtDesc(user.getId());
 
 		return records.stream().map(r -> {
 			BloodPressureRecordDTO dto = new BloodPressureRecordDTO();
