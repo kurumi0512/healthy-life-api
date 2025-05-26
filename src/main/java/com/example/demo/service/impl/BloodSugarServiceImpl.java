@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.mapper.BloodSugarMapper;
 import com.example.demo.model.entity.BloodSugarRecord;
 import com.example.demo.model.entity.User;
 import com.example.demo.repository.BloodSugarRecordRepository;
@@ -12,6 +13,9 @@ import com.example.demo.service.BloodSugarService;
 
 @Service
 public class BloodSugarServiceImpl implements BloodSugarService {
+
+	@Autowired
+	private BloodSugarMapper bloodSugarMapper;
 
 	@Autowired
 	private BloodSugarRecordRepository bloodSugarRepository;
@@ -40,4 +44,10 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	public void delete(Integer id) {
 		bloodSugarRepository.deleteById(id);
 	}
+
+//	@Override
+//	public List<BloodSugarRecordDTO> findByUserIdAndDateRange(Integer userId, LocalDate startDate, LocalDate endDate) {
+//		List<BloodSugarRecord> list = bloodSugarRepository.findByUserIdAndDateRange(userId, startDate, endDate);
+//		return list.stream().map(bloodSugarMapper::toDto).collect(Collectors.toList());
+//	}
 }

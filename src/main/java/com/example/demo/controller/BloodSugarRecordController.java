@@ -81,4 +81,5 @@ public class BloodSugarRecordController {
 		bloodSugarService.delete(id);
 		return ResponseEntity.ok("刪除成功！");
 	}
+
 }

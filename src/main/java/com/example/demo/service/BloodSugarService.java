@@ -15,4 +15,7 @@ public interface BloodSugarService {
 	BloodSugarRecord findById(Integer id);
 
 	void delete(Integer id);
+
+	// public List<BloodSugarRecordDTO> findByUserIdAndDateRange(Integer userId,
+	// LocalDate startDate, LocalDate endDate);
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.mapper.BloodPressureMapper;
 import com.example.demo.model.dto.BloodPressureRecordDTO;
 import com.example.demo.model.entity.BloodPressureRecord;
 import com.example.demo.model.entity.User;
@@ -15,6 +16,9 @@ import com.example.demo.repository.UserRepository;
 
 @Service
 public class BloodPressureRecordService {
+
+	@Autowired
+	private BloodPressureMapper bloodPressureMapper;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -79,5 +83,17 @@ public class BloodPressureRecordService {
 
 		bpRecordRepository.delete(record);
 	}
+
+//	public List<BloodPressureRecordDTO> findByUserIdAndDateRange(Integer userId, LocalDate startDate,
+//			LocalDate endDate) {
+//		List<BloodPressureRecord> list = bpRecordRepository.findByUserIdAndDateRange(userId, startDate, endDate);
+//		return list.stream().map(bloodPressureMapper::toDto).collect(Collectors.toList());
+//	}
+//
+//	public List<BloodPressureRecordDTO> findRecentDaysByUserId(Integer userId, int days) {
+//		LocalDate startDate = LocalDate.now().minusDays(days);
+//		List<BloodPressureRecord> list = bpRecordRepository.findByUserIdInRecentDays(userId, startDate);
+//		return list.stream().map(bloodPressureMapper::toDto).collect(Collectors.toList());
+//	}
 
 }
