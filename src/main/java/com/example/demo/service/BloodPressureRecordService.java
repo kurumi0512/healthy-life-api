@@ -84,6 +84,11 @@ public class BloodPressureRecordService {
 		bpRecordRepository.delete(record);
 	}
 
+	public List<BloodPressureRecordDTO> getAllRecords(Integer accountId) {
+		List<BloodPressureRecord> records = bpRecordRepository.findByUser_Account_IdOrderByRecordDateDesc(accountId);
+		return bloodPressureMapper.toDtoList(records); // ✅ 修正這裡
+	}
+
 //	public List<BloodPressureRecordDTO> findByUserIdAndDateRange(Integer userId, LocalDate startDate,
 //			LocalDate endDate) {
 //		List<BloodPressureRecord> list = bpRecordRepository.findByUserIdAndDateRange(userId, startDate, endDate);

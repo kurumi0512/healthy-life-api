@@ -59,4 +59,11 @@ public class BloodPressureRecordController {
 		return ApiResponse.success("刪除成功", null);
 	}
 
+	@GetMapping
+	public ApiResponse<List<BloodPressureRecordDTO>> getAllRecords(HttpSession session) {
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		List<BloodPressureRecordDTO> records = bpRecordService.getAllRecords(accountId);
+		return ApiResponse.success("查詢所有血壓紀錄成功", records);
+	}
+
 }

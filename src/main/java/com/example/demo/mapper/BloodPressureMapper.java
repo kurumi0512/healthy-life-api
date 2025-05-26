@@ -1,5 +1,8 @@
 package com.example.demo.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,5 +24,10 @@ public class BloodPressureMapper {
 	// DTO → Entity（接收前端輸入）
 	public BloodPressureRecord toEntity(BloodPressureRecordDTO dto) {
 		return modelMapper.map(dto, BloodPressureRecord.class);
+	}
+
+	// Entity List → DTO List
+	public List<BloodPressureRecordDTO> toDtoList(List<BloodPressureRecord> entityList) {
+		return entityList.stream().map(this::toDto).collect(Collectors.toList());
 	}
 }
