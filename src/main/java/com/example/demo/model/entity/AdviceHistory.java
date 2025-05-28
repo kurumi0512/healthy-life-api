@@ -34,6 +34,7 @@ public class AdviceHistory {
 	private String generatedAdvice;
 
 	@Column(name = "created_at")
+	@org.hibernate.annotations.CreationTimestamp // ✅ 自動加上目前時間
 	private LocalDateTime createdAt;
 
 	@ManyToOne

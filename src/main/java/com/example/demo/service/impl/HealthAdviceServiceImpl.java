@@ -1,15 +1,27 @@
 package com.example.demo.service.impl;
 
+import java.time.LocalDateTime;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.entity.AdviceHistory;
+import com.example.demo.model.entity.User;
+import com.example.demo.repository.AdviceHistoryRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.HealthAdviceService;
 
 import jakarta.annotation.PostConstruct;
 
 @Service
 public class HealthAdviceServiceImpl implements HealthAdviceService {
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private AdviceHistoryRepository adviceHistoryRepository;
 
 	@Autowired
 	private ChatClient chatClient;
@@ -54,6 +66,24 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 			return false;
 		}
 		return !insideThinkBlock[0];
+	}
+
+	@Override
+	public void saveAdviceRecord(Integer userId, String input, String advice) {
+		User user = userRepository.findById(userId).orElse(null);
+		if (user == null)
+			return;
+		saveAdviceRecord(user, input, advice); // ✅ 呼叫上面那個方法
+	}
+
+	public void saveAdviceRecord(User user, String prompt, String generatedAdvice) {
+		AdviceHistory history = new AdviceHistory();
+		history.setUser(user);
+		history.setInputContext(prompt);
+		history.setGeneratedAdvice(generatedAdvice);
+		history.setType("AI健康建議");
+		history.setCreatedAt(LocalDateTime.now()); // ➕ 時間
+		adviceHistoryRepository.save(history);
 	}
 
 }

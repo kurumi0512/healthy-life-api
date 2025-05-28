@@ -12,37 +12,77 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.example.demo.model.dto.UserCert;
+import com.example.demo.model.entity.User;
+import com.example.demo.repository.AdviceHistoryRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.HealthAdviceService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/rest/health/healthAI")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class HealthStreamController {
+
 	@Autowired
 	private HealthAdviceService healthAdviceService;
 
 	@Autowired
+	private AdviceHistoryRepository adviceHistoryRepository;
+
+	@Autowired
 	private ChatClient chatClient;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@GetMapping(value = "/advice-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter getAdviceStream(@RequestParam double height, @RequestParam double weight, @RequestParam int age,
-			@RequestParam String goal) {
+			@RequestParam String goal, HttpSession session) {
 
 		String prompt = healthAdviceService.generatePrompt(height, weight, age, goal);
-		SseEmitter emitter = new SseEmitter(0L);
+		SseEmitter emitter = new SseEmitter(0L); // 無限等待時間
 		final boolean[] insideThinkBlock = { false };
 
-		chatClient.prompt().user(prompt).stream().content().subscribe(word -> {
+		// 用來累積完整建議文字
+		StringBuilder fullAdvice = new StringBuilder();
+
+		chatClient.prompt().user(prompt).stream().content().subscribe(message -> {
 			try {
-				if (healthAdviceService.shouldDisplayWord(word, insideThinkBlock)) {
-					emitter.send(word);
+				System.out.println("✅ AI 回傳片段：" + message);
+				if (message != null && !message.trim().isEmpty()
+						&& healthAdviceService.shouldDisplayWord(message, insideThinkBlock)) {
+					fullAdvice.append(message);
+					emitter.send(message);
 				}
 			} catch (IOException e) {
 				emitter.completeWithError(e);
 			}
+
 		}, error -> {
 			emitter.completeWithError(error);
-		}, emitter::complete);
+		}, () -> {
+			try {
+				emitter.send("[DONE]");
+				emitter.complete();
+
+				// ✅ 串流完成後儲存到資料庫
+				UserCert cert = (UserCert) session.getAttribute("cert");
+				if (cert != null) {
+					User user = userRepository.findByAccount_Id(cert.getAccountId()).orElse(null);
+					if (user != null) {
+						healthAdviceService.saveAdviceRecord(user.getId(), prompt, fullAdvice.toString());
+					} else {
+						System.out.println("⚠️ 找不到對應的使用者");
+					}
+				} else {
+					System.out.println("⚠️ 無登入資訊，略過儲存建議紀錄");
+				}
+			} catch (IOException e) {
+				emitter.completeWithError(e);
+			}
+		}); // ❗❗❗ 這行是你漏掉的
 
 		return emitter;
 	}
