@@ -51,15 +51,26 @@ public class HealthStreamController {
 		chatClient.prompt().user(prompt).stream().content().subscribe(message -> {
 			try {
 				System.out.println("✅ AI 回傳片段：" + message);
+
 				if (message != null && !message.trim().isEmpty()
 						&& healthAdviceService.shouldDisplayWord(message, insideThinkBlock)) {
-					fullAdvice.append(message);
-					emitter.send(message);
+
+					// 🛡️ 過濾 AI 偷輸出的開場白或雜訊
+					String cleanMsg = message.trim();
+					if (cleanMsg.startsWith("或多餘的文字") || cleanMsg.startsWith("以下是我為您生成的建議")
+							|| cleanMsg.toLowerCase().contains("<think>")
+							|| cleanMsg.toLowerCase().startsWith("讓我們一起來看看")
+							|| cleanMsg.toLowerCase().startsWith("這是一個健康建議")) {
+						System.out.println("🛑 過濾雜訊片段：" + cleanMsg);
+						return; // 不送到前端
+					}
+
+					fullAdvice.append(cleanMsg);
+					emitter.send(cleanMsg);
 				}
 			} catch (IOException e) {
 				emitter.completeWithError(e);
 			}
-
 		}, error -> {
 			emitter.completeWithError(error);
 		}, () -> {
@@ -82,8 +93,7 @@ public class HealthStreamController {
 			} catch (IOException e) {
 				emitter.completeWithError(e);
 			}
-		}); // ❗❗❗ 這行是你漏掉的
-
+		});
 		return emitter;
 	}
 }

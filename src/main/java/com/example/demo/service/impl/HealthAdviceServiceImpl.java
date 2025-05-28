@@ -41,18 +41,22 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 	public String generatePrompt(double height, double weight, int age, String goal) {
 		double bmi = weight / Math.pow(height / 100.0, 2);
 		return String.format("""
-				     		你是一位健康建議助理，請直接以繁體中文回覆下列內容，**禁止輸出任何 <think> 或思考過程的內容。**
+				你是一位健康建議助理，請直接以繁體中文回覆下列內容，**禁止輸出任何 <think> 或思考過程的內容。**
 
 				使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f，目標：%s。
 
-				請提供簡潔明確的「飲食建議」與「運動建議」，用條列式清楚說明：
+				請提供簡潔明確的「飲食建議」與「運動建議」，用條列式清楚說明，每一段開頭請加上「• 」，段落之間請換行，內容請符合以下格式：
 
 				- 根據 BMI 給出每日建議攝取熱量（大卡）區間
 				- 加入每日建議飲水量（毫升）
-				- 請簡化內容，總字數請壓在 500 字以內
+				- 飲食建議：列出幾項主要原則或建議食材，包含澱粉、蛋白質、蔬菜等
+				- 運動建議：提供簡單好執行的日常運動與時間建議
+				- 每個段落都加一個「•」，段落之間請換行不要黏在一起
 				- 回覆請使用 Markdown 格式
-				- 不要包含任何 <think> 或思考文字，只輸出建議內容
-				""", age, height, weight, bmi, goal); // 原始 prompt 字串
+				- 總字數請壓在 500 字以內
+				- 請使用台灣人說話方式
+				- **只輸出建議內容，不要輸出任何 <think>、開場白、或思考過程**
+				""", age, height, weight, bmi, goal);
 	}
 
 	@Override
