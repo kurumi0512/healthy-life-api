@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import java.net.URI;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +13,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.demo.exception.CertException;
+import com.example.demo.mapper.AccountMapper;
+import com.example.demo.model.dto.AccountResponseDTO;
 import com.example.demo.model.dto.LoginRequest;
 import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.model.dto.UserCert;
+import com.example.demo.model.dto.UserDto;
+import com.example.demo.model.entity.Account;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.EmailService;
+import com.example.demo.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -39,6 +44,9 @@ public class AuthController {
 
 	@Autowired
 	private EmailService emailService;
+
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult,
@@ -71,10 +79,13 @@ public class AuthController {
 
 	// ✅ 修改為不依賴 Session 的 Email 驗證
 	@GetMapping("/email/confirm")
-	public ResponseEntity<?> confirmEmail(@RequestParam String username) {
-		accountService.activateAccount(username);
-		return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:5173/verify-success"))
-				.build();
+	public RedirectView confirmEmail(@RequestParam String username) {
+		try {
+			accountService.activateAccount(username); // ✅ 呼叫 Service 層處理
+			return new RedirectView("http://localhost:5173/verify-success");
+		} catch (Exception e) {
+			return new RedirectView("http://localhost:5173/verify-fail");
+		}
 	}
 
 	// ✅ 登入時驗證 session 中的驗證碼
@@ -128,5 +139,28 @@ public class AuthController {
 		} else {
 			return Map.of("loggedIn", false);
 		}
+	}
+
+	@GetMapping("/user/profile")
+	public ResponseEntity<UserDto> getCurrentUserProfile(HttpSession session) {
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		if (accountId == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		}
+
+		UserDto dto = userService.findByAccountId(accountId);
+		return ResponseEntity.ok(dto);
+	}
+
+	@GetMapping("/account/profile")
+	public ResponseEntity<AccountResponseDTO> getAccountProfile(HttpSession session) {
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		if (accountId == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		}
+
+		Account account = accountService.findById(accountId);
+		AccountResponseDTO dto = AccountMapper.toResponseDTO(account);
+		return ResponseEntity.ok(dto);
 	}
 }

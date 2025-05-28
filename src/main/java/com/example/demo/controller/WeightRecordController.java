@@ -65,4 +65,11 @@ public class WeightRecordController {
 		List<WeightRecordDTO> records = weightRecordService.getRecent7RecordsByAccountId(accountId);
 		return ApiResponse.success("查詢成功", records);
 	}
+
+	@GetMapping("/latest")
+	public ApiResponse<WeightRecordDTO> getLatestRecord(HttpSession session) {
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		WeightRecordDTO latest = weightRecordService.getLatestRecordByAccountId(accountId);
+		return ApiResponse.success("查詢成功", latest);
+	}
 }

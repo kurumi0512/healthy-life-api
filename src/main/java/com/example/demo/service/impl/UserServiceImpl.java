@@ -79,4 +79,13 @@ public class UserServiceImpl implements UserService {
 		account.setStatus("INACTIVE"); // ✅ 用文字代表未啟用狀態
 		accountRepository.save(account);
 	}
+
+	@Override
+	public UserDto findByAccountId(Integer accountId) {
+		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("查無使用者"));
+
+		Account account = user.getAccount();
+		return new UserDto(user.getId(), account.getUsername(), user.getName(), account.getEmail(), account.getStatus(),
+				account.getRole().name());
+	}
 }

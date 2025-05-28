@@ -96,4 +96,25 @@ public class WeightRecordService {
 			return dto;
 		}).collect(Collectors.toList());
 	}
+
+	public WeightRecordDTO getLatestRecordByAccountId(Integer accountId) {
+		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
+
+		WeightRecord latest = weightRecordRepository.findTopByUser_IdOrderByCreatedAtDesc(user.getId());
+
+		if (latest == null) {
+			throw new RuntimeException("尚無體重紀錄");
+		}
+
+		WeightRecordDTO dto = new WeightRecordDTO();
+		dto.setRecordId(latest.getId());
+		dto.setAccountId(accountId);
+		dto.setWeight(latest.getWeight());
+		dto.setHeight(latest.getHeight());
+		dto.setAge(latest.getAge());
+		dto.setBmi(latest.getBmi());
+		dto.setRecordDate(latest.getRecordDate().toString());
+
+		return dto;
+	}
 }

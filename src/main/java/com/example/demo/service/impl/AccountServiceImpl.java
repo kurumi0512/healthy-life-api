@@ -65,4 +65,9 @@ public class AccountServiceImpl implements AccountService {
 			throw new RuntimeException("查無帳號：" + username);
 		}
 	}
+
+	@Override
+	public Account findById(Integer id) {
+		return accountRepository.findById(id).orElseThrow(() -> new RuntimeException("找不到帳號 ID：" + id));
+	}
 }

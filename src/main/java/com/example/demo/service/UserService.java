@@ -15,4 +15,6 @@ public interface UserService {
 	void updateUser(Integer id, UserDto userDto); // 修改使用者資料
 
 	void deleteUser(Integer id); // 刪除使用者（或設 active = false）
+
+	UserDto findByAccountId(Integer accountId);
 }
