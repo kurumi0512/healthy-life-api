@@ -18,10 +18,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.example.demo.exception.CertException;
 import com.example.demo.mapper.AccountMapper;
 import com.example.demo.model.dto.AccountResponseDTO;
+import com.example.demo.model.dto.LoginCheckResponse;
 import com.example.demo.model.dto.LoginRequest;
 import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.model.dto.UserCert;
 import com.example.demo.model.dto.UserDto;
+import com.example.demo.model.dto.UserSimpleDto;
 import com.example.demo.model.entity.Account;
 import com.example.demo.service.AccountService;
 import com.example.demo.service.AuthService;
@@ -37,69 +39,73 @@ import jakarta.validation.Valid;
 //負責帳號註冊、登入、登出、驗證與查詢登入狀態的控制器（Controller）
 public class AuthController {
 
-	@Autowired
+	@Autowired // 登入驗證（Login）
 	private AuthService authService;
 
 	@Autowired
-	private AccountService accountService;
+	private AccountService accountService; // 帳號管理（註冊、啟用帳號）
 
 	@Autowired
-	private EmailService emailService;
+	private EmailService emailService; // email認證
 
 	@Autowired
-	private UserService userService;
+	private UserService userService; // 查詢使用者
 
 	// 登入
 	@PostMapping("/register") // @Valid欄位驗證,BindingResult會接收這些驗證檢查的結果 //HttpSession 專門幫某一位使用者存資料
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult,
 			HttpSession session) {
 
-		// ✅ 驗證格式錯誤
+		// 驗證格式錯誤
 		if (bindingResult.hasErrors()) {
 			String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
 			return ResponseEntity.badRequest().body(Map.of("message", errorMessage));
 		}
 
-		// ✅ 檢查帳號是否已存在
+		// 檢查帳號是否已存在
 		// 409 Conflict：伺服器無法完成請求，因為請求內容與目前的資源狀態衝突
 		if (accountService.isUsernameTaken(request.getUsername())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "帳號已存在"));
 		}
 
-		// ✅ 儲存帳號資料
+		// 儲存帳號資料
 		accountService.register(request.getUsername(), request.getPassword(), request.getEmail());
 
-		// ✅ 設定 session（模擬登入）
+		// 設定 session（模擬登入）
 		session.setAttribute("user", request.getUsername());
 
-		// ✅ 發送驗證信
+		// 發送驗證信
 		String confirmUrl = "http://localhost:8082/rest/health/email/confirm?username=" + request.getUsername();
 		emailService.sendEmail(request.getEmail(), "請點擊驗證連結：" + confirmUrl);
 
-		// ✅ 回傳訊息與登入資料
+		// 回傳訊息與登入資料
 		return ResponseEntity.ok(Map.of("message", "註冊成功，請至信箱驗證帳號", "user", request.getUsername()));
 	}
 
-	// ✅ 修改為不依賴 Session 的 Email 驗證
+	// 修改為不依賴 Session 的 Email 驗證
 	@GetMapping("/email/confirm")
 	public RedirectView confirmEmail(@RequestParam String username) {
 		try {
-			accountService.activateAccount(username); // ✅ 呼叫 Service 層處理
-			return new RedirectView("http://localhost:5173/verify-success");
+			accountService.activateAccount(username); // 嘗試啟用帳號,呼叫 Service 層處理
+			return new RedirectView("http://localhost:5173/verify-success"); // 成功 → 導向成功頁
 		} catch (Exception e) {
-			return new RedirectView("http://localhost:5173/verify-fail");
+			return new RedirectView("http://localhost:5173/verify-fail"); // 失敗 → 導向失敗頁
 		}
 	}
 
-	// ✅ 登入時驗證 session 中的驗證碼
+	// 接收 JSON 格式的登入資料
+	// 登入時驗證 session 中的驗證碼
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
 		String sessionCode = (String) session.getAttribute("captcha");
 
+		// 比較使用者輸入的驗證碼是否和 session 中的相同（不區分大小寫）
+		// 錯誤就回傳 HTTP 401 未授權
 		if (sessionCode == null || !sessionCode.equalsIgnoreCase(request.getCaptcha())) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "驗證碼錯誤"));
 		}
 
+		// authService.validate(...)：調用驗證服務，確認帳號密碼正確。
 		try {
 			UserCert cert = authService.validate(request.getUsername(), request.getPassword());
 
@@ -107,7 +113,7 @@ public class AuthController {
 			session.setAttribute("user", cert.getUsername());
 			session.setAttribute("accountId", cert.getAccountId());
 
-			// ✅ 直接把完整 cert 當作 user 傳給前端
+			// 如果成功，就將重要資料（cert物件、帳號名稱、accountId）放入 session 中。
 			return ResponseEntity.ok(Map.of("message", "登入成功", "user", cert));
 		} catch (CertException e) {
 			return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
@@ -116,31 +122,36 @@ public class AuthController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpSession session) {
-		session.invalidate();
+		session.invalidate(); // 清空 session,清空登入狀態
 		return ResponseEntity.ok(Map.of("message", "已登出"));
 	}
 
 	@GetMapping("/user")
+	// 從 session 中取出認證物件 UserCert
 	public ResponseEntity<?> currentUser(HttpSession session) {
 		UserCert cert = (UserCert) session.getAttribute("cert");
 
+		// session有資料,就回傳帳號資料
 		if (cert != null) {
 			return ResponseEntity.ok(Map.of("user",
 					Map.of("username", cert.getUsername(), "id", cert.getAccountId(), "role", cert.getRole())));
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "尚未登入"));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "尚未登入")); // 未登入回傳401未登入錯誤
 		}
 	}
 
+	// 用 accountId 和 username 檢查是否還在登入狀態
 	@GetMapping("/check")
-	public Map<String, Object> checkLogin(HttpSession session) {
+	public ResponseEntity<LoginCheckResponse> checkLogin(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
 		String username = (String) session.getAttribute("user");
 
 		if (accountId != null && username != null) {
-			return Map.of("loggedIn", true, "user", Map.of("accountId", accountId, "username", username));
+			UserSimpleDto user = new UserSimpleDto(accountId, username);
+			LoginCheckResponse response = new LoginCheckResponse(true, user);
+			return ResponseEntity.ok(response);
 		} else {
-			return Map.of("loggedIn", false);
+			return ResponseEntity.ok(new LoginCheckResponse(false, null));
 		}
 	}
 

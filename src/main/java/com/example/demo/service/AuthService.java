@@ -14,6 +14,8 @@ import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.HashUtil;
 
+//登入驗證（Login）
+//只專注在「登入流程」，就是負責你能不能進系統、登入後拿到什麼憑證。
 @Service
 public class AuthService {
 
@@ -31,6 +33,11 @@ public class AuthService {
 	 * @return UserCert 登入後的憑證
 	 * @throws CertException 帳號或密碼錯誤
 	 */
+
+	// AuthService.validate() 登入用
+	// 只針對「已存在帳號」做 身份驗證
+	// 驗證密碼 → 更新登入時間 → 封裝 UserCert → 回傳
+	// 不做帳號建立、不處理 email 驗證、不改帳號狀態
 	public UserCert validate(String username, String rawPassword) throws CertException {
 		Optional<Account> optAccount = accountRepository.findByUsername(username);
 		if (optAccount.isEmpty()) {

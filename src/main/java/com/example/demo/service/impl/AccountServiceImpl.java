@@ -14,6 +14,8 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AccountService;
 import com.example.demo.util.HashUtil;
 
+//帳號管理（註冊、啟用帳號）
+//負責帳號的「建立、狀態控制」，例如註冊、新增使用者、驗證帳號、查詢帳號。
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -23,6 +25,7 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private UserRepository userRepository;
 
+	// 新增帳號（含密碼加鹽 + 雜湊），建立對應的 User 物件
 	@Override
 	public void register(String username, String password, String email) {
 		String salt = HashUtil.generateSalt();
