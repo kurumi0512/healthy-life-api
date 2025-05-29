@@ -27,11 +27,23 @@ public class User {
 	@OneToOne
 	@JoinColumn(name = "account_id")
 	private Account account;
+
 	@Column(name = "name")
 	private String name;
+
+	@Column(name = "age")
 	private Integer age;
+
+	@Column(name = "gender")
 	private String gender;
+
+	@Column(name = "goal")
 	private String goal;
+
+	@Column(name = "height")
+	private Double height;
+
+	@Column(name = "target_Weight")
 	private Double targetWeight;
 
 	@Column(name = "age_group")
