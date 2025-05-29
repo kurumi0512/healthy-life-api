@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//前台個人頁面（個人檔案）
+//回傳綜合使用者資訊	
+//整合 User 表 + Account 表
+
 public class UserDto {
 	private Integer Id; // User 表的主鍵
 	private String username; // 帳號名稱（來自 Account 表）

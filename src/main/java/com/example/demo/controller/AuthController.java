@@ -53,6 +53,7 @@ public class AuthController {
 
 	// 登入
 	@PostMapping("/register") // @Valid欄位驗證,BindingResult會接收這些驗證檢查的結果 //HttpSession 專門幫某一位使用者存資料
+	// ResponseEntity<?>表示 HTTP 回應的泛型
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult,
 			HttpSession session) {
 
@@ -155,17 +156,19 @@ public class AuthController {
 		}
 	}
 
+	// 取出「使用者個人資料（UserDto）,後臺管理帳號使用
 	@GetMapping("/user/profile")
 	public ResponseEntity<UserDto> getCurrentUserProfile(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
 		if (accountId == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);// 沒登入表示未授權的請求
 		}
 
 		UserDto dto = userService.findByAccountId(accountId);
 		return ResponseEntity.ok(dto);
 	}
 
+	// 取出帳號資料（AccountResponseDTO）,前台個人頁面
 	@GetMapping("/account/profile")
 	public ResponseEntity<AccountResponseDTO> getAccountProfile(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
@@ -173,6 +176,7 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 		}
 
+		// 不直接回傳實體 Account，而是轉成精簡、對前端友善的 DTO，避免暴露敏感欄位（例如密碼、鹽值）
 		Account account = accountService.findById(accountId);
 		AccountResponseDTO dto = AccountMapper.toResponseDTO(account);
 		return ResponseEntity.ok(dto);

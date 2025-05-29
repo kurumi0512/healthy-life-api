@@ -6,6 +6,8 @@ import com.example.demo.model.enums.Role;
 
 import lombok.Data;
 
+//後臺帳號管理用
+//純粹 Account 表
 @Data
 public class AccountResponseDTO {
 	private Integer id;
