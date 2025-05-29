@@ -34,6 +34,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/rest/health")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+//負責帳號註冊、登入、登出、驗證與查詢登入狀態的控制器（Controller）
 public class AuthController {
 
 	@Autowired
@@ -48,7 +49,8 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/register")
+	// 登入
+	@PostMapping("/register") // @Valid欄位驗證,BindingResult會接收這些驗證檢查的結果 //HttpSession 專門幫某一位使用者存資料
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult,
 			HttpSession session) {
 
@@ -59,6 +61,7 @@ public class AuthController {
 		}
 
 		// ✅ 檢查帳號是否已存在
+		// 409 Conflict：伺服器無法完成請求，因為請求內容與目前的資源狀態衝突
 		if (accountService.isUsernameTaken(request.getUsername())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "帳號已存在"));
 		}
