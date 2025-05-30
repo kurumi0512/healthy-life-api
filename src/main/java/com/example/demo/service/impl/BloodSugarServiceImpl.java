@@ -22,6 +22,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 
 	@Override
 	public void save(BloodSugarRecord record) {
+		validateBloodSugar(record);
 		bloodSugarRepository.save(record);
 	}
 
@@ -50,4 +51,16 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 //		List<BloodSugarRecord> list = bloodSugarRepository.findByUserIdAndDateRange(userId, startDate, endDate);
 //		return list.stream().map(bloodSugarMapper::toDto).collect(Collectors.toList());
 //	}
+
+	private void validateBloodSugar(BloodSugarRecord record) {
+		if (record.getFasting() < 30 || record.getFasting() > 250) {
+			throw new IllegalArgumentException("餐前血糖值必須在 30 到 250 mg/dL 之間");
+		}
+		if (record.getPostMeal() < 30 || record.getPostMeal() > 250) {
+			throw new IllegalArgumentException("餐後血糖值必須在 30 到 250 mg/dL 之間");
+		}
+		if (record.getNotes() != null && record.getNotes().length() > 50) {
+			throw new IllegalArgumentException("備註最多只能輸入 50 個字");
+		}
+	}
 }

@@ -37,6 +37,7 @@ public class BloodPressureRecordService {
 		record.setDiastolic(dto.getDiastolic());
 		record.setNotes(dto.getNotes());
 		record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		validateBloodPressure(record);
 		bpRecordRepository.save(record);
 	}
 
@@ -67,7 +68,6 @@ public class BloodPressureRecordService {
 	public void updateRecord(BloodPressureRecordDTO dto) {
 		BloodPressureRecord record = bpRecordRepository.findById(dto.getRecordId())
 				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
-
 		// 確認是否為此使用者的紀錄
 		if (!record.getUser().getAccount().getId().equals(dto.getAccountId())) {
 			throw new RuntimeException("無權修改此紀錄");
@@ -77,7 +77,7 @@ public class BloodPressureRecordService {
 		record.setDiastolic(dto.getDiastolic());
 		record.setNotes(dto.getNotes());
 		record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
-
+		validateBloodPressure(record);
 		bpRecordRepository.save(record);
 	}
 
@@ -90,6 +90,18 @@ public class BloodPressureRecordService {
 		}
 
 		bpRecordRepository.delete(record);
+	}
+
+	private void validateBloodPressure(BloodPressureRecord record) {
+		if (record.getSystolic() < 50 || record.getSystolic() > 250) {
+			throw new IllegalArgumentException("收縮壓必須在 50～250 mmHg 範圍內");
+		}
+		if (record.getDiastolic() < 50 || record.getDiastolic() > 250) {
+			throw new IllegalArgumentException("舒張壓必須在 50～250 mmHg 範圍內");
+		}
+		if (record.getNotes() != null && record.getNotes().length() > 50) {
+			throw new IllegalArgumentException("備註最多 50 字");
+		}
 	}
 
 }

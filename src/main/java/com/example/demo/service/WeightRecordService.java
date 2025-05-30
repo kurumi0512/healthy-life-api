@@ -23,6 +23,7 @@ public class WeightRecordService {
 	private UserRepository userRepository;
 
 	public void saveRecord(WeightRecordDTO dto) {
+		validateWeightRecord(dto);
 		User user = userRepository.findByAccount_Id(dto.getAccountId())
 				.orElseThrow(() -> new RuntimeException("使用者不存在"));
 
@@ -41,6 +42,7 @@ public class WeightRecordService {
 		List<WeightRecord> records = weightRecordRepository.findByUser_Account_IdOrderByRecordDateAsc(accountId);
 		return records.stream().map(r -> {
 			WeightRecordDTO dto = new WeightRecordDTO();
+			dto.setRecordId(r.getId());
 			dto.setAccountId(accountId);
 			dto.setWeight(r.getWeight());
 			dto.setHeight(r.getHeight());
@@ -52,10 +54,11 @@ public class WeightRecordService {
 	}
 
 	public void updateRecord(WeightRecordDTO dto) {
+		validateWeightRecord(dto);
 		WeightRecord record = weightRecordRepository.findById(dto.getRecordId())
 				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
 
-		if (!record.getUser().getAccountId().equals(dto.getAccountId())) {
+		if (!record.getUser().getAccount().getId().equals(dto.getAccountId())) {
 			throw new RuntimeException("無權修改此紀錄");
 		}
 
@@ -72,7 +75,8 @@ public class WeightRecordService {
 		WeightRecord record = weightRecordRepository.findById(recordId)
 				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
 
-		if (!record.getUser().getAccountId().equals(accountId)) {
+		// ✅ 正確驗證帳號
+		if (!record.getUser().getAccount().getId().equals(accountId)) {
 			throw new RuntimeException("無權刪除此紀錄");
 		}
 
@@ -116,5 +120,20 @@ public class WeightRecordService {
 		dto.setRecordDate(latest.getRecordDate().toString());
 
 		return dto;
+	}
+
+	private void validateWeightRecord(WeightRecordDTO dto) {
+		if (dto.getHeight() < 50 || dto.getHeight() > 250) {
+			throw new IllegalArgumentException("身高必須介於 50～250 公分");
+		}
+		if (dto.getWeight() < 10 || dto.getWeight() > 300) {
+			throw new IllegalArgumentException("體重必須介於 10～300 公斤");
+		}
+		if (dto.getAge() < 1 || dto.getAge() > 120) {
+			throw new IllegalArgumentException("年齡必須介於 1～120 歲");
+		}
+		if (dto.getBmi() < 10 || dto.getBmi() > 100) {
+			throw new IllegalArgumentException("BMI 數值異常");
+		}
 	}
 }
