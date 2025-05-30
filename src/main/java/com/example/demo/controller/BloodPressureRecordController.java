@@ -22,11 +22,14 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/rest/health/bp")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+
+//新增、查詢、更新、刪除血壓紀錄,Session 驗證
 public class BloodPressureRecordController {
 
 	@Autowired
 	private BloodPressureRecordService bpRecordService;
 
+	// 新增血壓紀錄,null表示不回傳實際的資料
 	@PostMapping
 	public ApiResponse<?> saveRecord(@RequestBody BloodPressureRecordDTO dto, HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
@@ -35,6 +38,7 @@ public class BloodPressureRecordController {
 		return ApiResponse.success("新增成功", null);
 	}
 
+	// 查詢最近一週血壓紀錄
 	@GetMapping("/recent")
 	public ApiResponse<List<BloodPressureRecordDTO>> getRecentRecords(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
@@ -42,9 +46,25 @@ public class BloodPressureRecordController {
 		return ApiResponse.success("查詢成功", records);
 	}
 
+	// 查詢所有血壓紀錄
+	@GetMapping
+	public ApiResponse<List<BloodPressureRecordDTO>> getAllRecords(HttpSession session) {
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		List<BloodPressureRecordDTO> records = bpRecordService.getAllRecords(accountId);
+		return ApiResponse.success("查詢所有血壓紀錄成功", records);
+	}
+
+	// 更新血壓紀錄
+	// 前端送來的 JSON 資料會自動轉換成 DTO（含收縮壓、舒張壓、日期、備註等）
+	// 從 Session 中取得目前登入者的 accountId
 	@PutMapping("/{recordId}")
 	public ApiResponse<?> updateRecord(@PathVariable Integer recordId, @RequestBody BloodPressureRecordDTO dto,
 			HttpSession session) {
+//		從 Session 取出當前使用者的帳號 ID。
+//
+//		將這個 ID 放進 DTO，確保只能編輯屬於自己的資料。
+//
+//		將 URL 中的 recordId 加入 DTO，指定這是要更新哪一筆紀錄。
 		Integer accountId = (Integer) session.getAttribute("accountId");
 		dto.setAccountId(accountId);
 		dto.setRecordId(recordId);
@@ -52,18 +72,12 @@ public class BloodPressureRecordController {
 		return ApiResponse.success("更新成功", null);
 	}
 
+	// 刪除血壓紀錄,呼叫 service 刪除該筆紀錄
 	@DeleteMapping("/{recordId}")
 	public ApiResponse<?> deleteRecord(@PathVariable Integer recordId, HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
 		bpRecordService.deleteRecord(recordId, accountId);
 		return ApiResponse.success("刪除成功", null);
-	}
-
-	@GetMapping
-	public ApiResponse<List<BloodPressureRecordDTO>> getAllRecords(HttpSession session) {
-		Integer accountId = (Integer) session.getAttribute("accountId");
-		List<BloodPressureRecordDTO> records = bpRecordService.getAllRecords(accountId);
-		return ApiResponse.success("查詢所有血壓紀錄成功", records);
 	}
 
 }

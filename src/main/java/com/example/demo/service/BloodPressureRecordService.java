@@ -26,10 +26,11 @@ public class BloodPressureRecordService {
 	@Autowired
 	private BloodPressureRecordRepository bpRecordRepository;
 
+	// 根據 accountId 取得使用者（User）物件
 	public void saveRecord(BloodPressureRecordDTO dto) {
 		User user = userRepository.findByAccount_Id(dto.getAccountId())
 				.orElseThrow(() -> new RuntimeException("找不到使用者"));
-
+		// DTO（資料傳輸物件）轉換成 Entity（實體物件）
 		BloodPressureRecord record = new BloodPressureRecord();
 		record.setUser(user);
 		record.setSystolic(dto.getSystolic());
@@ -41,7 +42,7 @@ public class BloodPressureRecordService {
 
 	public List<BloodPressureRecordDTO> getRecentRecords(Integer accountId) {
 		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
-
+		// 取得最近 5 筆資料，排序條件為建立時間由新到舊
 		List<BloodPressureRecord> records = bpRecordRepository.findTop5ByUser_IdOrderByCreatedAtDesc(user.getId());
 
 		return records.stream().map(r -> {
@@ -56,6 +57,13 @@ public class BloodPressureRecordService {
 		}).collect(Collectors.toList());
 	}
 
+	// 取得某帳號下的所有血壓紀錄，依紀錄時間降序排列
+	public List<BloodPressureRecordDTO> getAllRecords(Integer accountId) {
+		List<BloodPressureRecord> records = bpRecordRepository.findByUser_Account_IdOrderByRecordDateDesc(accountId);
+		return bloodPressureMapper.toDtoList(records);
+	}
+
+	// 更新資料
 	public void updateRecord(BloodPressureRecordDTO dto) {
 		BloodPressureRecord record = bpRecordRepository.findById(dto.getRecordId())
 				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
@@ -64,7 +72,7 @@ public class BloodPressureRecordService {
 		if (!record.getUser().getAccount().getId().equals(dto.getAccountId())) {
 			throw new RuntimeException("無權修改此紀錄");
 		}
-
+		// 更新資料欄位
 		record.setSystolic(dto.getSystolic());
 		record.setDiastolic(dto.getDiastolic());
 		record.setNotes(dto.getNotes());
@@ -83,22 +91,5 @@ public class BloodPressureRecordService {
 
 		bpRecordRepository.delete(record);
 	}
-
-	public List<BloodPressureRecordDTO> getAllRecords(Integer accountId) {
-		List<BloodPressureRecord> records = bpRecordRepository.findByUser_Account_IdOrderByRecordDateDesc(accountId);
-		return bloodPressureMapper.toDtoList(records); // ✅ 修正這裡
-	}
-
-//	public List<BloodPressureRecordDTO> findByUserIdAndDateRange(Integer userId, LocalDate startDate,
-//			LocalDate endDate) {
-//		List<BloodPressureRecord> list = bpRecordRepository.findByUserIdAndDateRange(userId, startDate, endDate);
-//		return list.stream().map(bloodPressureMapper::toDto).collect(Collectors.toList());
-//	}
-//
-//	public List<BloodPressureRecordDTO> findRecentDaysByUserId(Integer userId, int days) {
-//		LocalDate startDate = LocalDate.now().minusDays(days);
-//		List<BloodPressureRecord> list = bpRecordRepository.findByUserIdInRecentDays(userId, startDate);
-//		return list.stream().map(bloodPressureMapper::toDto).collect(Collectors.toList());
-//	}
 
 }
