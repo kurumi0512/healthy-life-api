@@ -12,4 +12,6 @@ public interface BloodSugarRecordRepository extends JpaRepository<BloodSugarReco
 
 	List<BloodSugarRecord> findByUserIdOrderByRecordDateDesc(Integer userId);
 
+	List<BloodSugarRecord> findByUserOrderByRecordDateDesc(User user);
+
 }

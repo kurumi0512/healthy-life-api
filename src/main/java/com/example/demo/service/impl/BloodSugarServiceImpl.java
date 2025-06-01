@@ -28,7 +28,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 
 	@Override
 	public List<BloodSugarRecord> findByUser(User user) {
-		return bloodSugarRepository.findByUser(user);
+		return bloodSugarRepository.findByUserOrderByRecordDateDesc(user);
 	}
 
 	@Override
@@ -63,4 +63,5 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 			throw new IllegalArgumentException("備註最多只能輸入 50 個字");
 		}
 	}
+
 }

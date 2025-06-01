@@ -33,13 +33,17 @@ public class WeightRecordService {
 		record.setHeight(dto.getHeight());
 		record.setAge(dto.getAge());
 		record.setBmi(dto.getBmi());
-		record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
+			record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		} else {
+			record.setRecordDate(LocalDate.now()); // 預設今天
+		}
 
 		weightRecordRepository.save(record);
 	}
 
 	public List<WeightRecordDTO> getRecordsByAccountId(Integer accountId) {
-		List<WeightRecord> records = weightRecordRepository.findByUser_Account_IdOrderByRecordDateAsc(accountId);
+		List<WeightRecord> records = weightRecordRepository.findByUser_Account_IdOrderByRecordDateDesc(accountId);
 		return records.stream().map(r -> {
 			WeightRecordDTO dto = new WeightRecordDTO();
 			dto.setRecordId(r.getId());
@@ -66,7 +70,11 @@ public class WeightRecordService {
 		record.setHeight(dto.getHeight());
 		record.setAge(dto.getAge());
 		record.setBmi(dto.getBmi());
-		record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
+			record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		} else {
+			record.setRecordDate(LocalDate.now()); // 預設今天
+		}
 
 		weightRecordRepository.save(record);
 	}

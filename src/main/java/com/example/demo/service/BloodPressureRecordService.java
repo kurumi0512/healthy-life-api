@@ -36,7 +36,13 @@ public class BloodPressureRecordService {
 		record.setSystolic(dto.getSystolic());
 		record.setDiastolic(dto.getDiastolic());
 		record.setNotes(dto.getNotes());
-		record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+
+		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
+			record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		} else {
+			record.setRecordDate(LocalDate.now()); // 預設今天
+		}
+
 		validateBloodPressure(record);
 		bpRecordRepository.save(record);
 	}
@@ -76,7 +82,9 @@ public class BloodPressureRecordService {
 		record.setSystolic(dto.getSystolic());
 		record.setDiastolic(dto.getDiastolic());
 		record.setNotes(dto.getNotes());
-		record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
+			record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		}
 		validateBloodPressure(record);
 		bpRecordRepository.save(record);
 	}
