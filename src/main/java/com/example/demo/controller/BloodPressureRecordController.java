@@ -60,14 +60,10 @@ public class BloodPressureRecordController {
 	@PutMapping("/{recordId}")
 	public ApiResponse<?> updateRecord(@PathVariable Integer recordId, @RequestBody BloodPressureRecordDTO dto,
 			HttpSession session) {
-//		從 Session 取出當前使用者的帳號 ID。
-//
-//		將這個 ID 放進 DTO，確保只能編輯屬於自己的資料。
-//
-//		將 URL 中的 recordId 加入 DTO，指定這是要更新哪一筆紀錄。
-		Integer accountId = (Integer) session.getAttribute("accountId");
-		dto.setAccountId(accountId);
-		dto.setRecordId(recordId);
+
+		Integer accountId = (Integer) session.getAttribute("accountId"); // 從 Session 取出當前使用者的帳號 ID。
+		dto.setAccountId(accountId); // 將這個 ID 放進 DTO，確保只能編輯屬於自己的資料。
+		dto.setRecordId(recordId); // 將 URL 中的 recordId 加入 DTO，指定這是要更新哪一筆紀錄。
 		bpRecordService.updateRecord(dto);
 		return ApiResponse.success("更新成功", null);
 	}

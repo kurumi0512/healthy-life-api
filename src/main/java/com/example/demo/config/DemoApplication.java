@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //是 Spring Boot 專案的啟動主程式（入口點）,整個系統的起點
+
 @SpringBootApplication
 public class DemoApplication {
 	public static void main(String[] args) {
