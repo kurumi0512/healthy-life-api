@@ -114,6 +114,8 @@ public class AuthController {
 			session.setAttribute("user", cert.getUsername());
 			session.setAttribute("accountId", cert.getAccountId());
 
+			// ✅ 這行是為了 WebSocket 傳入 Principal 用的
+			session.setAttribute("username", cert.getUsername());
 			// 如果成功，就將重要資料（cert物件、帳號名稱、accountId）放入 session 中。
 			return ResponseEntity.ok(Map.of("message", "登入成功", "user", cert));
 		} catch (CertException e) {

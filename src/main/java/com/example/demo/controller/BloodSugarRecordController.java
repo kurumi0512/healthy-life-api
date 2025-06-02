@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import com.example.demo.mapper.BloodSugarMapper;
 import com.example.demo.model.dto.BloodSugarRecordDTO;
 import com.example.demo.model.entity.BloodSugarRecord;
 import com.example.demo.model.entity.User;
+import com.example.demo.service.AlertService;
 import com.example.demo.service.BloodSugarService;
 import com.example.demo.service.UserService;
 
@@ -37,16 +39,32 @@ public class BloodSugarRecordController {
 	@Autowired
 	private UserService userService; // ✅ 假設你有登入驗證，可以從這裡取得目前使用者
 
+	@Autowired
+	private AlertService alertService; // ➕ 注入推播服務
+
 	// ➕ 新增血糖紀錄
 	@PostMapping
-	public ResponseEntity<String> addBloodSugar(@RequestBody BloodSugarRecordDTO dto) {
+	public ResponseEntity<String> addBloodSugar(@RequestBody BloodSugarRecordDTO dto, Principal principal) {
 		BloodSugarRecord record = bloodSugarMapper.toEntity(dto);
 
-		// ✅ 從登入狀態取得目前 user（不要從前端傳 userId）
-		User currentUser = userService.getCurrentLoginUser(); // 假設你有這樣的方法
+		// ✅ 從登入狀態取得使用者（安全）
+		User currentUser = userService.getCurrentLoginUser();
 		record.setUser(currentUser);
 
+		// ✅ 儲存紀錄
 		bloodSugarService.save(record);
+
+		// ✅ 推播邏輯：若餐後血糖異常，自動推播
+		Double postMeal = dto.getPostMeal();
+		if (postMeal != null) {
+			Integer userId = currentUser.getId(); // ✅ 使用登入者 ID
+			if (postMeal >= 200) {
+				alertService.sendBloodSugarWarning(userId, "❗ 餐後血糖達糖尿病標準（≧200 mg/dL）");
+			} else if (postMeal >= 140) {
+				alertService.sendBloodSugarWarning(userId, "⚠️ 餐後血糖為糖尿病前期（140～199 mg/dL）");
+			}
+		}
+
 		return ResponseEntity.ok("新增成功！");
 	}
 
