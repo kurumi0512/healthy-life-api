@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,18 +29,10 @@ public class BloodPressureRecordService {
 	public void saveRecord(BloodPressureRecordDTO dto) {
 		User user = userRepository.findByAccount_Id(dto.getAccountId())
 				.orElseThrow(() -> new RuntimeException("找不到使用者"));
-		// DTO（資料傳輸物件）轉換成 Entity（實體物件）
-		BloodPressureRecord record = new BloodPressureRecord();
-		record.setUser(user);
-		record.setSystolic(dto.getSystolic());
-		record.setDiastolic(dto.getDiastolic());
-		record.setNotes(dto.getNotes());
 
-		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
-			record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
-		} else {
-			record.setRecordDate(LocalDate.now()); // 預設今天
-		}
+		// 改呼叫你新增的 toEntityWithDefaults 方法
+		BloodPressureRecord record = bloodPressureMapper.toEntityWithDefaults(dto);
+		record.setUser(user); // 補上關聯（這還是要手動）
 
 		validateBloodPressure(record);
 		bpRecordRepository.save(record);
@@ -49,19 +40,14 @@ public class BloodPressureRecordService {
 
 	public List<BloodPressureRecordDTO> getRecentRecords(Integer accountId) {
 		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
-		// 取得最近 5 筆資料，排序條件為建立時間由新到舊
+
 		List<BloodPressureRecord> records = bpRecordRepository.findTop5ByUser_IdOrderByCreatedAtDesc(user.getId());
 
-		return records.stream().map(r -> {
-			BloodPressureRecordDTO dto = new BloodPressureRecordDTO();
-			dto.setRecordId(r.getId());
-			dto.setSystolic(r.getSystolic());
-			dto.setDiastolic(r.getDiastolic());
-			dto.setRecordDate(r.getRecordDate().toString());
-			dto.setNotes(r.getNotes());
-			dto.setAccountId(accountId);
-			return dto;
-		}).collect(Collectors.toList());
+		// 用 mapper 做轉換
+		List<BloodPressureRecordDTO> dtoList = bloodPressureMapper.toDtoList(records);
+		// 額外補上 accountId（ModelMapper 不會自動做這件事）
+		dtoList.forEach(dto -> dto.setAccountId(accountId));
+		return dtoList;
 	}
 
 	// 取得某帳號下的所有血壓紀錄，依紀錄時間降序排列

@@ -1,5 +1,7 @@
 package com.example.demo.mapper;
 
+import java.time.LocalDate;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,5 +23,13 @@ public class BloodSugarMapper {
 	// DTO 轉 Entity（接收前端資料轉成資料表格式）
 	public BloodSugarRecord toEntity(BloodSugarRecordDTO dto) {
 		return modelMapper.map(dto, BloodSugarRecord.class);
+	}
+
+	public BloodSugarRecord toEntityWithDefaults(BloodSugarRecordDTO dto) {
+		BloodSugarRecord entity = modelMapper.map(dto, BloodSugarRecord.class);
+		if (dto.getRecordDate() == null) {
+			entity.setRecordDate(LocalDate.now());
+		}
+		return entity;
 	}
 }

@@ -1,14 +1,17 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.mapper.BloodSugarMapper;
+import com.example.demo.model.dto.BloodSugarRecordDTO;
 import com.example.demo.model.entity.BloodSugarRecord;
 import com.example.demo.model.entity.User;
 import com.example.demo.repository.BloodSugarRecordRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BloodSugarService;
 
 @Service
@@ -20,37 +23,45 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	@Autowired
 	private BloodSugarRecordRepository bloodSugarRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@Override
-	public void save(BloodSugarRecord record) {
+	public void save(BloodSugarRecordDTO dto) {
+		User user = userRepository.findByAccount_Id(dto.getAccountId())
+				.orElseThrow(() -> new RuntimeException("找不到使用者"));
+
+		BloodSugarRecord record = bloodSugarMapper.toEntityWithDefaults(dto);
+		record.setUser(user);
+
 		validateBloodSugar(record);
 		bloodSugarRepository.save(record);
 	}
 
 	@Override
-	public List<BloodSugarRecord> findByUser(User user) {
-		return bloodSugarRepository.findByUserOrderByRecordDateDesc(user);
+	public List<BloodSugarRecordDTO> findByUserId(Integer accountId) {
+		List<BloodSugarRecord> records = bloodSugarRepository.findByUser_Account_IdOrderByRecordDateDesc(accountId);
+		return records.stream().map(bloodSugarMapper::toDto).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<BloodSugarRecord> findRecentByUserId(Integer userId, int limit) {
-		return bloodSugarRepository.findByUserIdOrderByRecordDateDesc(userId).stream().limit(limit).toList();
+	public List<BloodSugarRecordDTO> findRecentByUserId(Integer accountId, int limit) {
+		List<BloodSugarRecord> records = bloodSugarRepository.findByUserIdOrderByRecordDateDesc(accountId).stream()
+				.limit(limit).toList();
+
+		return records.stream().map(bloodSugarMapper::toDto).collect(Collectors.toList());
 	}
 
 	@Override
-	public BloodSugarRecord findById(Integer id) {
-		return bloodSugarRepository.findById(id).orElse(null);
+	public BloodSugarRecordDTO findById(Integer id) {
+		BloodSugarRecord record = bloodSugarRepository.findById(id).orElseThrow(() -> new RuntimeException("紀錄不存在"));
+		return bloodSugarMapper.toDto(record);
 	}
 
 	@Override
 	public void delete(Integer id) {
 		bloodSugarRepository.deleteById(id);
 	}
-
-//	@Override
-//	public List<BloodSugarRecordDTO> findByUserIdAndDateRange(Integer userId, LocalDate startDate, LocalDate endDate) {
-//		List<BloodSugarRecord> list = bloodSugarRepository.findByUserIdAndDateRange(userId, startDate, endDate);
-//		return list.stream().map(bloodSugarMapper::toDto).collect(Collectors.toList());
-//	}
 
 	private void validateBloodSugar(BloodSugarRecord record) {
 		if (record.getFasting() < 30 || record.getFasting() > 250) {
@@ -63,5 +74,4 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 			throw new IllegalArgumentException("備註最多只能輸入 50 個字");
 		}
 	}
-
 }

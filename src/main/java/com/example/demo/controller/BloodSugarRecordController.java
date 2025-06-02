@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.mapper.BloodSugarMapper;
 import com.example.demo.model.dto.BloodSugarRecordDTO;
-import com.example.demo.model.entity.BloodSugarRecord;
 import com.example.demo.model.entity.User;
 import com.example.demo.service.BloodSugarService;
 import com.example.demo.service.UserService;
@@ -25,61 +23,59 @@ import com.example.demo.service.UserService;
 @RestController
 @RequestMapping("/rest/health/blood-sugar")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
-
 public class BloodSugarRecordController {
 
 	@Autowired
 	private BloodSugarService bloodSugarService;
 
 	@Autowired
-	private BloodSugarMapper bloodSugarMapper; // ✅ 建議用 Mapper 類，而不是直接用 ModelMapper
+	private BloodSugarMapper bloodSugarMapper;
 
 	@Autowired
-	private UserService userService; // ✅ 假設你有登入驗證，可以從這裡取得目前使用者
+	private UserService userService;
 
 	// ➕ 新增血糖紀錄
 	@PostMapping
 	public ResponseEntity<String> addBloodSugar(@RequestBody BloodSugarRecordDTO dto) {
-		BloodSugarRecord record = bloodSugarMapper.toEntity(dto);
+		// 從目前登入者取得 user 對應的 accountId（血糖 DTO 需要）
+		User currentUser = userService.getCurrentLoginUser();
+		dto.setAccountId(currentUser.getAccount().getId());
 
-		// ✅ 從登入狀態取得目前 user（不要從前端傳 userId）
-		User currentUser = userService.getCurrentLoginUser(); // 假設你有這樣的方法
-		record.setUser(currentUser);
-
-		bloodSugarService.save(record);
+		bloodSugarService.save(dto); // ✅ 傳 DTO，不是 Entity
 		return ResponseEntity.ok("新增成功！");
 	}
 
-	// 🔍 查詢所有紀錄（可依使用者過濾）
+	// 🔍 查詢所有紀錄
 	@GetMapping
 	public ResponseEntity<List<BloodSugarRecordDTO>> findAll() {
-		User currentUser = userService.getCurrentLoginUser(); // ✅ 只查自己紀錄
-		List<BloodSugarRecord> records = bloodSugarService.findByUser(currentUser);
-
-		List<BloodSugarRecordDTO> dtoList = records.stream().map(bloodSugarMapper::toDto).collect(Collectors.toList());
-
+		User currentUser = userService.getCurrentLoginUser();
+		List<BloodSugarRecordDTO> dtoList = bloodSugarService.findByUserId(currentUser.getAccount().getId()); // ✅ 改用
+																												// accountId
+																												// 查詢
 		return ResponseEntity.ok(dtoList);
 	}
 
+	// ✏️ 更新血糖紀錄
 	@PutMapping("/{id}")
 	public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody BloodSugarRecordDTO dto) {
-		BloodSugarRecord record = bloodSugarService.findById(id);
-		if (record == null) {
+		BloodSugarRecordDTO originalDto = bloodSugarService.findById(id); // ✅ 回傳 DTO
+
+		if (originalDto == null) {
 			return ResponseEntity.notFound().build();
 		}
-		record.setFasting(dto.getFasting());
-		record.setPostMeal(dto.getPostMeal());
-		record.setRecordDate(dto.getRecordDate());
-		record.setNotes(dto.getNotes());
 
-		bloodSugarService.save(record);
+		// ⚠️ 這裡你可以限制只能更新自己帳號的紀錄（驗證 accountId）
+
+		dto.setAccountId(originalDto.getAccountId()); // 維持原紀錄所屬帳號
+		dto.setRecordId(id); // 確保要更新的是這筆
+		bloodSugarService.save(dto); // ✅ 更新使用相同 save 方法（由 id 區分新增或更新）
 		return ResponseEntity.ok("更新成功！");
 	}
 
+	// ❌ 刪除紀錄
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> delete(@PathVariable Integer id) {
 		bloodSugarService.delete(id);
 		return ResponseEntity.ok("刪除成功！");
 	}
-
 }

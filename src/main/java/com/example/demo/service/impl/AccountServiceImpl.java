@@ -26,9 +26,10 @@ public class AccountServiceImpl implements AccountService {
 	private UserRepository userRepository;
 
 	// 新增帳號（含密碼加鹽 + 雜湊），建立對應的 User 物件
+	// 由於密碼要額外加密、salt 要另外產生，不能直接用 Mapper 套過去，所以這裡手動處理是比較好的方式。
 	@Override
 	public void register(String username, String password, String email) {
-		String salt = HashUtil.generateSalt();
+		String salt = HashUtil.generateSalt(); // 先產生 salt，再加密 hashPassword
 		String hashPassword = HashUtil.hashPassword(password, salt);
 
 		Account account = new Account();
@@ -37,15 +38,15 @@ public class AccountServiceImpl implements AccountService {
 		account.setHashSalt(salt);
 		account.setHashPassword(hashPassword);
 		account.setCompleted(false); // 尚未驗證
-		account.setStatus("UNVERIFIED");
+		account.setStatus("UNVERIFIED"); // 初始狀態
 		account.setRole(Role.USER); // 預設使用者角色
 		account.setCreateTime(LocalDateTime.now());
 
-		accountRepository.save(account); // ✅ 儲存帳號
+		accountRepository.save(account); // 儲存至資料庫
 
 		// ✅ 建立對應的 User，name 預設為 username
 		User user = new User();
-		user.setAccount(account);
+		user.setAccount(account); // ✅ 關聯到剛剛儲存的帳號
 		user.setCreateTime(LocalDateTime.now());
 		user.setName(username); // ✅ 將帳號當作預設姓名
 		userRepository.save(user); // ✅ 儲存 user
