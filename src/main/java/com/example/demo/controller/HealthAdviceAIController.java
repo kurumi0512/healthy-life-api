@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/rest/health/healthAI")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
-public class HealthStreamController {
+public class HealthAdviceAIController {
 
 	@Autowired
 	private HealthAdviceService healthAdviceService;
@@ -31,7 +31,7 @@ public class HealthStreamController {
 	@Autowired
 	private AdviceHistoryRepository adviceHistoryRepository;
 
-	@Autowired
+	@Autowired // 註冊的 ChatClient
 	private ChatClient chatClient;
 
 	@Autowired
