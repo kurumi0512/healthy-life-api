@@ -62,7 +62,7 @@ public class WeightRecordController {
 	@GetMapping("/recent")
 	public ApiResponse<List<WeightRecordDTO>> getRecentRecords(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
-		List<WeightRecordDTO> records = weightRecordService.getRecent7RecordsByAccountId(accountId);
+		List<WeightRecordDTO> records = weightRecordService.getRecent5RecordsByAccountId(accountId);
 		return ApiResponse.success("查詢成功", records);
 	}
 
