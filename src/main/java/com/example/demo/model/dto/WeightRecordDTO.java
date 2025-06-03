@@ -11,4 +11,5 @@ public class WeightRecordDTO {
 	private Integer age;
 	private Double bmi;
 	private String recordDate;
+
 }
