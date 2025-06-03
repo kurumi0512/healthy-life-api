@@ -66,7 +66,7 @@ public class AuthService {
 	 * 將 Account 與 User 資料轉換為 UserCert 憑證 DTO
 	 */
 	private UserCert toUserCert(Account account, User user) {
-		boolean userCompleted = user != null && user.getAge() != null && user.getGender() != null;
+		boolean userCompleted = user != null && user.getBirthDate() != null && user.getGender() != null;
 
 		return new UserCert(account.getId(), account.getUsername(), account.getRole().name(),
 				user != null ? user.getName() : null, account.getEmail(), account.getCompleted(),

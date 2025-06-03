@@ -38,14 +38,6 @@ public class BloodPressureRecordController {
 		return ApiResponse.success("新增成功", null);
 	}
 
-//	// 查詢最近一週血壓紀錄
-//	@GetMapping("/recent")
-//	public ApiResponse<List<BloodPressureRecordDTO>> getRecentRecords(HttpSession session) {
-//		Integer accountId = (Integer) session.getAttribute("accountId");
-//		List<BloodPressureRecordDTO> records = bpRecordService.getRecentRecords(accountId);
-//		return ApiResponse.success("查詢成功", records);
-//	}
-
 	// 查詢所有血壓紀錄
 	@GetMapping
 	public ApiResponse<List<BloodPressureRecordDTO>> getAllRecords(HttpSession session) {

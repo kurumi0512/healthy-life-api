@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//統一回應格式的工具類別,這是一個「統一回應格式的工具類別」，用來讓你在 Controller 或 ExceptionHandler 中回傳給前端的資料格式一致，無論成功或錯誤。
-//因為Data不知道是什麼型態,所以給T泛型
+// API(應用程式介面)，是一種「讓不同系統之間可以互相溝通的方法和規則」
+//自訂的泛型回應格式類別，用來統一後端回應給前端的格式
+//因為Data不知道是什麼型態,所以用泛型T
 //建立 Server 與 Client 在傳遞資料上的統一結構與標準(含錯誤)
-//原先有寫一個private Integer status 狀態:400,200,不過可以交由前端處理
 
 @Data
 @AllArgsConstructor

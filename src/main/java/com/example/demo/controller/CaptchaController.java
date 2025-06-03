@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@RestController
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+//圖形驗證碼產生器
+@RestController // REST 控制器
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") // 跨域請求
 public class CaptchaController {
 
 	@GetMapping("/rest/health/captcha")
@@ -29,11 +30,11 @@ public class CaptchaController {
 		// 建立圖片物件與畫布
 		int width = 100, height = 40;
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		Graphics g = image.getGraphics();
+		Graphics g = image.getGraphics(); // 取得畫筆G來畫東西
 
 		// 背景與字體樣式
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, width, height);
+		g.setColor(Color.WHITE); // 白色背景
+		g.fillRect(0, 0, width, height); // 設定黑色字體,粗體字
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Arial", Font.BOLD, 28));
 		g.drawString(code, 22, 30); // X 與 Y 座標要對齊
@@ -41,7 +42,7 @@ public class CaptchaController {
 		// 加入干擾線條
 		g.setColor(Color.RED);
 		Random rand = new Random();
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 25; i++) { // 畫 25 條紅色干擾線，增加辨識困難度，防止機器辨識圖片內容
 			int x1 = rand.nextInt(width);
 			int y1 = rand.nextInt(height);
 			int x2 = rand.nextInt(width);

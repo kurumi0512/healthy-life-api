@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class UserProfileDto {
+	private Integer id;
 	private String name;
-	private Integer age;
+	private String birthDate;
 	private String gender;
 	private String goal;
 	private Double height;

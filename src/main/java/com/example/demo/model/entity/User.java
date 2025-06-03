@@ -1,5 +1,6 @@
 package com.example.demo.model.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -31,8 +32,8 @@ public class User {
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "age")
-	private Integer age;
+	@Column(name = "birth_date")
+	private LocalDate birthDate;
 
 	@Column(name = "gender")
 	private String gender;

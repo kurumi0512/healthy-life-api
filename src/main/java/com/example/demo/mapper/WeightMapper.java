@@ -10,6 +10,7 @@ import com.example.demo.model.dto.WeightRecordDTO;
 import com.example.demo.model.entity.WeightRecord;
 
 @Component // Spring Bean，讓 Spring Boot 自動託管它
+//mapper 的功能是「資料轉換」：它負責在 DTO（資料傳輸物件） 和 Entity（資料庫實體物件） 之間轉換
 public class WeightMapper {
 
 	@Autowired
@@ -20,13 +21,13 @@ public class WeightMapper {
 	public WeightRecordDTO toDto(WeightRecord entity) {
 		WeightRecordDTO dto = new WeightRecordDTO();
 		dto.setRecordId(entity.getId());
-		dto.setAccountId(entity.getUser().getAccount().getId()); // ← 自動補上 Account ID
+		dto.setAccountId(entity.getUser().getAccount().getId()); // 避免前端知道 User/Account 結構
 		dto.setWeight(entity.getWeight());
 		dto.setHeight(entity.getHeight());
 		dto.setAge(entity.getAge());
 		dto.setBmi(entity.getBmi());
 		if (entity.getRecordDate() != null) {
-			dto.setRecordDate(entity.getRecordDate().toString()); // 避免前端知道 user、account 結構，只給 accountId
+			dto.setRecordDate(entity.getRecordDate().toString()); // 轉成字串，避免時間格式錯誤
 		}
 		return dto;
 	}
@@ -49,7 +50,7 @@ public class WeightMapper {
 	}
 
 	// 可選擴充：Entity + User → DTO（更方便某些需要）
-	// 這個方法的用途是確保即使上層忘了設 recordDate，也能補上今天的日期。它先用 toEntity()，然後補上日期。
+	// 萬一 recordDate 是空的，會自動補上今天的日期
 	public WeightRecord toEntityWithDateDefault(WeightRecordDTO dto) {
 		WeightRecord entity = toEntity(dto);
 		if (entity.getRecordDate() == null) {
