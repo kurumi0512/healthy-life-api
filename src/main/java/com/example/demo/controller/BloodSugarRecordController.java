@@ -35,16 +35,27 @@ public class BloodSugarRecordController {
 	@Autowired
 	private UserService userService; // 取得目前登入使用者的資訊
 
-	// 新增血糖紀錄
 	@PostMapping
 	public ResponseEntity<String> addBloodSugar(@RequestBody BloodSugarRecordDTO dto) {
-		// 取得目前登入者的帳號 ID，並設給 DTO，確認資料屬於誰
+		System.out.println("📦 收到的 DTO：" + dto);
+		System.out.println("➡️ recordDate 是否有值？" + dto.getRecordDate());
+
 		User currentUser = userService.getCurrentLoginUser();
 		dto.setAccountId(currentUser.getAccount().getId());
-
-		bloodSugarService.save(dto); // 傳 DTO，不是 Entity
-		return ResponseEntity.ok("新增成功！"); // 呼叫 Service 儲存資料，並回傳成功訊息（狀態碼 200 + 字串）
+		bloodSugarService.save(dto);
+		return ResponseEntity.ok("新增成功！");
 	}
+
+//	// 新增血糖紀錄
+//	@PostMapping
+//	public ResponseEntity<String> addBloodSugar(@RequestBody BloodSugarRecordDTO dto) {
+//		// 取得目前登入者的帳號 ID，並設給 DTO，確認資料屬於誰
+//		User currentUser = userService.getCurrentLoginUser();
+//		dto.setAccountId(currentUser.getAccount().getId());
+//
+//		bloodSugarService.save(dto); // 傳 DTO，不是 Entity
+//		return ResponseEntity.ok("新增成功！"); // 呼叫 Service 儲存資料，並回傳成功訊息（狀態碼 200 + 字串）
+//	}
 
 	// 查詢所有紀錄
 	@GetMapping
@@ -65,6 +76,8 @@ public class BloodSugarRecordController {
 			return ResponseEntity.notFound().build();
 		}
 
+		System.out.println("🛠️ 更新請求的 ID：" + id);
+		System.out.println("🛠️ 查詢到的原始 DTO：" + originalDto);
 		dto.setAccountId(originalDto.getAccountId()); // 保留原本的帳號 ID 並設定正確的紀錄 ID
 		dto.setRecordId(id);
 		bloodSugarService.save(dto); // 用同一個 save 方法來儲存更新後的資料

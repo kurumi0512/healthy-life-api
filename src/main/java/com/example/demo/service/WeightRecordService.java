@@ -28,6 +28,12 @@ public class WeightRecordService {
 
 	public void saveRecord(WeightRecordDTO dto) {
 		validateWeightRecord(dto); // 呼叫 validateWeightRecord 驗證欄位正確性
+
+		// 預設記錄日期為今天
+		if (dto.getRecordDate() == null) {
+			dto.setRecordDate(LocalDate.now());
+		}
+
 		User user = userRepository.findByAccount_Id(dto.getAccountId())
 				.orElseThrow(() -> new RuntimeException("使用者不存在")); // 根據 dto.getAccountId() 查出對應的 User。
 
@@ -60,8 +66,8 @@ public class WeightRecordService {
 		record.setHeight(dto.getHeight());
 		record.setAge(dto.getAge());
 		record.setBmi(dto.getBmi());
-		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
-			record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		if (dto.getRecordDate() != null) {
+			record.setRecordDate(dto.getRecordDate());
 		} else {
 			record.setRecordDate(LocalDate.now());
 		}

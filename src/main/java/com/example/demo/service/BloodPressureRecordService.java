@@ -68,8 +68,10 @@ public class BloodPressureRecordService {
 		record.setSystolic(dto.getSystolic());
 		record.setDiastolic(dto.getDiastolic());
 		record.setNotes(dto.getNotes());
-		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
-			record.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		if (dto.getRecordDate() != null) {
+			record.setRecordDate(dto.getRecordDate());
+		} else {
+			record.setRecordDate(LocalDate.now());
 		}
 		validateBloodPressure(record);
 		bpRecordRepository.save(record);

@@ -27,7 +27,7 @@ public class WeightMapper {
 		dto.setAge(entity.getAge());
 		dto.setBmi(entity.getBmi());
 		if (entity.getRecordDate() != null) {
-			dto.setRecordDate(entity.getRecordDate().toString()); // 轉成字串，避免時間格式錯誤
+			dto.setRecordDate(entity.getRecordDate());
 		}
 		return dto;
 	}
@@ -40,10 +40,11 @@ public class WeightMapper {
 		entity.setAge(dto.getAge());
 		entity.setBmi(dto.getBmi());
 
-		if (dto.getRecordDate() != null && !dto.getRecordDate().isBlank()) {
-			entity.setRecordDate(LocalDate.parse(dto.getRecordDate()));
+		// 直接設 LocalDate
+		if (dto.getRecordDate() != null) {
+			entity.setRecordDate(dto.getRecordDate());
 		} else {
-			entity.setRecordDate(LocalDate.now()); // 若前端沒給日期，就用今天作為預設值
+			entity.setRecordDate(LocalDate.now());
 		}
 
 		return entity;

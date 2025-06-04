@@ -2,14 +2,20 @@ package com.example.demo.model.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
 public class BloodSugarRecordDTO {
-	private Integer recordId; // 紀錄主鍵 ID，用於修改/查詢
-	private Integer accountId; // 使用者帳號 ID（必要欄位）
-	private Double fasting; // 空腹血糖
-	private Double postMeal; // 飯後血糖
-	private LocalDate recordDate; // 紀錄日期
-	private String notes; // 備註（可為 null）
+	private Integer recordId; // 編輯用主鍵 ID
+	private Integer accountId; // 後端自動設定，不由前端傳入
+
+	private Double fasting; // 餐前血糖
+	private Double postMeal; // 餐後血糖
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private LocalDate recordDate;
+
+	private String notes; // 備註，可為 null
 }

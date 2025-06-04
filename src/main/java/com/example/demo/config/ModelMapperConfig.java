@@ -12,7 +12,9 @@ public class ModelMapperConfig {
 
 	@Bean
 	ModelMapper modelMapper() {
-		return new ModelMapper();
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setAmbiguityIgnored(true); // ⭐ 忽略模糊對應錯誤
+		return mapper;
 	}
 }
 

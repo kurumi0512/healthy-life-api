@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,27 @@ public class BloodPressureRecordController {
 	// 新增血壓紀錄,null表示不回傳實際的資料
 	@PostMapping
 	public ApiResponse<?> saveRecord(@RequestBody BloodPressureRecordDTO dto, HttpSession session) {
-		Integer accountId = (Integer) session.getAttribute("accountId");
-		dto.setAccountId(accountId);
-		bpRecordService.saveRecord(dto);
-		return ApiResponse.success("新增成功", null);
+		try {
+			Integer accountId = (Integer) session.getAttribute("accountId");
+
+			if (accountId == null) {
+				return ApiResponse.error("未登入，請重新登入後再嘗試");
+			}
+
+			dto.setAccountId(accountId);
+
+			// 若日期沒填，預設為今天
+			if (dto.getRecordDate() == null) {
+				dto.setRecordDate(LocalDate.now());
+			}
+
+			bpRecordService.saveRecord(dto);
+
+			return ApiResponse.success("新增成功", null);
+		} catch (Exception e) {
+			e.printStackTrace(); // 顯示詳細錯誤（方便 Debug）
+			return ApiResponse.error("新增失敗：" + e.getMessage());
+		}
 	}
 
 	// 查詢所有血壓紀錄

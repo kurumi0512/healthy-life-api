@@ -31,12 +31,11 @@ public class UserServiceImpl implements UserService {
 	// 從 session 中取得目前登入者的 accountId
 	@Override
 	public User getCurrentLoginUser() {
-		Integer accountId = (Integer) session.getAttribute("accountId"); // 從目前的登入 session 中取得 accountId
-		if (accountId == null) {
-			throw new RuntimeException("尚未登入");
-		}
-		// 然後用它去 UserRepository 查對應的 User
-		return userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("找不到使用者"));
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		if (accountId == null)
+			return null;
+
+		return userRepository.findByAccount_Id(accountId).orElse(null); // 回傳 null，讓 Controller 判斷
 	}
 
 	// 查出所有User,透過 Java Stream 把每筆 User + Account 組成 UserDto，只包含前端需要的欄位。

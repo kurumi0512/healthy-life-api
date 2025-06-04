@@ -34,13 +34,16 @@ public class BloodPressureMapper {
 	}
 
 	// DTO ➡ Entity + 預設值處理（進階版）
+
 	public BloodPressureRecord toEntityWithDefaults(BloodPressureRecordDTO dto) {
 		BloodPressureRecord entity = modelMapper.map(dto, BloodPressureRecord.class);
 
-		// 若前端未提供日期，預設今天
-		if (dto.getRecordDate() == null || dto.getRecordDate().isBlank()) {
+		// 若前端未傳日期，預設今天
+		if (dto.getRecordDate() == null) {
 			entity.setRecordDate(LocalDate.now());
+		} else {
+			entity.setRecordDate(dto.getRecordDate());
 		}
-		return entity;
+		return entity; // 👈 少了這行就會編譯錯誤
 	}
 }

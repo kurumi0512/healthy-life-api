@@ -1,5 +1,9 @@
 package com.example.demo.model.dto;
 
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +14,7 @@ public class WeightRecordDTO {
 	private Double height;
 	private Integer age;
 	private Double bmi;
-	private String recordDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private LocalDate recordDate;
 
 }
