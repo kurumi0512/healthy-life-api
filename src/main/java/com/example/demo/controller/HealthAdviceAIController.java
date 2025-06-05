@@ -61,17 +61,11 @@ public class HealthAdviceAIController {
 						&& healthAdviceService.shouldDisplayWord(message, insideThinkBlock)) {
 
 					// 過濾 AI 偷輸出的開場白或雜訊
-					String cleanMsg = message.trim();
-					if (cleanMsg.startsWith("或多餘的文字") || cleanMsg.startsWith("或思考过程，直接输出建议")
-							|| cleanMsg.toLowerCase().contains("<think>")
-							|| cleanMsg.toLowerCase().startsWith("讓我們一起來看看")
-							|| cleanMsg.toLowerCase().startsWith("這是一個健康建議")) {
-						System.out.println("🛑 過濾雜訊片段：" + cleanMsg);
-						return; // 不送到前端
-					}
+					String cleanMsg = message.trim().replace("•", "\n•") // 小黑點前加換行
+							.replaceAll("\n", "\n\n"); // 將單換行變雙換行讓段落更清晰
 
-					fullAdvice.append(cleanMsg);
-					emitter.send(cleanMsg); // 即時送給前端
+					fullAdvice.append(cleanMsg); // 加入完整建議內容
+					emitter.send(cleanMsg); // 送出這段格式化後的內容到前端
 				}
 			} catch (IOException e) {
 				emitter.completeWithError(e);
