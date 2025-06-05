@@ -17,4 +17,6 @@ public interface BloodSugarRecordRepository extends JpaRepository<BloodSugarReco
 	// ✅ 新增這個方法，支援血糖服務用 accountId 查紀錄
 	List<BloodSugarRecord> findByUser_Account_IdOrderByRecordDateDesc(Integer accountId);
 
+	// 取得某帳號最新一筆紀錄（recordDate 降冪排序）
+	BloodSugarRecord findTopByUser_Account_IdOrderByRecordDateDesc(Integer accountId);
 }

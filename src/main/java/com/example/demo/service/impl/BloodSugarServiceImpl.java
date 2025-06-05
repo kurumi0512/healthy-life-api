@@ -74,4 +74,10 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 			throw new IllegalArgumentException("備註最多只能輸入 50 個字");
 		}
 	}
+
+	@Override
+	public BloodSugarRecordDTO findLatestByUserId(Integer accountId) {
+		BloodSugarRecord latest = bloodSugarRepository.findTopByUser_Account_IdOrderByRecordDateDesc(accountId);
+		return latest != null ? bloodSugarMapper.toDto(latest) : null;
+	}
 }

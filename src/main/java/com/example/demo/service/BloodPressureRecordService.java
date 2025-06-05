@@ -100,4 +100,9 @@ public class BloodPressureRecordService {
 		}
 	}
 
+	public BloodPressureRecordDTO findLatestByUserId(Integer accountId) {
+		BloodPressureRecord latest = bpRecordRepository.findFirstByUser_Account_IdOrderByRecordDateDesc(accountId);
+		return (latest != null) ? bloodPressureMapper.toDto(latest) : null;
+	}
+
 }

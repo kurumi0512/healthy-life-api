@@ -11,4 +11,6 @@ public interface BloodPressureRecordRepository extends JpaRepository<BloodPressu
 
 	List<BloodPressureRecord> findByUser_Account_IdOrderByRecordDateDesc(Integer accountId);
 
+	BloodPressureRecord findFirstByUser_Account_IdOrderByRecordDateDesc(Integer accountId); // 根據 accountId 取得紀錄日期最新的一筆
+
 }

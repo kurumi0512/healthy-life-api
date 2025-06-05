@@ -18,6 +18,8 @@ public interface BloodSugarService {
 
 	void delete(Integer id);
 
+	BloodSugarRecordDTO findLatestByUserId(Integer accountId);
+
 	// 範例：條件查詢（保留）
 	// List<BloodSugarRecordDTO> findByUserIdAndDateRange(Integer userId, LocalDate
 	// startDate, LocalDate endDate);

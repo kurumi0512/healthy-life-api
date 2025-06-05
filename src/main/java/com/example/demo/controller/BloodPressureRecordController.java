@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,6 +85,18 @@ public class BloodPressureRecordController {
 		Integer accountId = (Integer) session.getAttribute("accountId");
 		bpRecordService.deleteRecord(recordId, accountId);
 		return ApiResponse.success("刪除成功", null);
+	}
+
+	@GetMapping("/latest")
+	public ResponseEntity<BloodPressureRecordDTO> getLatestRecord(HttpSession session) {
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		BloodPressureRecordDTO latest = bpRecordService.findLatestByUserId(accountId);
+
+		if (latest != null) {
+			return ResponseEntity.ok(latest);
+		} else {
+			return ResponseEntity.noContent().build(); // 沒資料回傳 204 No Content
+		}
 	}
 
 }

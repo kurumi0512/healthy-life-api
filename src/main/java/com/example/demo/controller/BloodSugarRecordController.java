@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -89,5 +90,19 @@ public class BloodSugarRecordController {
 	public ResponseEntity<String> delete(@PathVariable Integer id) {
 		bloodSugarService.delete(id);
 		return ResponseEntity.ok("刪除成功！"); // 呼叫 Service 刪除後，回傳成功訊息
+	}
+
+	// 查詢最新一筆血糖紀錄
+	@GetMapping("/latest")
+	public ResponseEntity<?> getLatestRecord() {
+		User currentUser = userService.getCurrentLoginUser();
+		BloodSugarRecordDTO latest = bloodSugarService.findLatestByUserId(currentUser.getAccount().getId());
+
+		if (latest != null) {
+			// ✅ 用 Map 包起來 → 前端才能用 res.data.data.recordDate 抓到
+			return ResponseEntity.ok(Map.of("data", latest));
+		} else {
+			return ResponseEntity.ok(Map.of("data", null)); // ✅ 這樣前端還是能解析，但不會錯誤
+		}
 	}
 }
