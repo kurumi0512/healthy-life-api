@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.dto.BloodPressureRecordDTO;
 import com.example.demo.response.ApiResponse;
-import com.example.demo.service.BloodPressureRecordService;
+import com.example.demo.service.impl.BloodPressureRecordServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -29,7 +28,7 @@ import jakarta.servlet.http.HttpSession;
 public class BloodPressureRecordController {
 
 	@Autowired
-	private BloodPressureRecordService bpRecordService;
+	private BloodPressureRecordServiceImpl bpRecordService;
 
 	// 新增血壓紀錄,null表示不回傳實際的資料
 	@PostMapping
@@ -88,14 +87,14 @@ public class BloodPressureRecordController {
 	}
 
 	@GetMapping("/latest")
-	public ResponseEntity<BloodPressureRecordDTO> getLatestRecord(HttpSession session) {
+	public ApiResponse<BloodPressureRecordDTO> getLatestRecord(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
 		BloodPressureRecordDTO latest = bpRecordService.findLatestByUserId(accountId);
 
 		if (latest != null) {
-			return ResponseEntity.ok(latest);
+			return ApiResponse.success("查詢成功", latest); // ✅ 包進 data
 		} else {
-			return ResponseEntity.noContent().build(); // 沒資料回傳 204 No Content
+			return ApiResponse.error("尚無紀錄");
 		}
 	}
 

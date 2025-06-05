@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.dto.WeightRecordDTO;
 import com.example.demo.response.ApiResponse;
-import com.example.demo.service.WeightRecordService;
+import com.example.demo.service.impl.WeightRecordServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 public class WeightRecordController {
 
 	@Autowired // 依賴注入
-	private WeightRecordService weightRecordService;
+	private WeightRecordServiceImpl weightRecordService;
 
 	// 查詢所有體重記錄
 	@GetMapping

@@ -26,9 +26,9 @@ import com.example.demo.model.dto.UserDto;
 import com.example.demo.model.dto.UserSimpleDto;
 import com.example.demo.model.entity.Account;
 import com.example.demo.service.AccountService;
-import com.example.demo.service.AuthService;
-import com.example.demo.service.EmailService;
 import com.example.demo.service.UserService;
+import com.example.demo.service.impl.AuthServiceImpl;
+import com.example.demo.service.impl.EmailServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -40,13 +40,13 @@ import jakarta.validation.Valid;
 public class AuthController {
 
 	@Autowired // 登入驗證（Login）
-	private AuthService authService;
+	private AuthServiceImpl authService;
 
 	@Autowired
 	private AccountService accountService; // 帳號管理（註冊、啟用帳號）
 
 	@Autowired
-	private EmailService emailService; // email認證
+	private EmailServiceImpl emailService; // email認證
 
 	@Autowired
 	private UserService userService; // 查詢使用者
