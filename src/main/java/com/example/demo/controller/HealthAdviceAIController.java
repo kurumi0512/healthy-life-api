@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.example.demo.model.dto.UserCert;
+import com.example.demo.model.entity.AdviceHistory;
 import com.example.demo.model.entity.User;
 import com.example.demo.repository.AdviceHistoryRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.response.ApiResponse;
 import com.example.demo.service.HealthAdviceService;
 
 import jakarta.servlet.http.HttpSession;
@@ -101,5 +104,30 @@ public class HealthAdviceAIController {
 			}
 		});
 		return emitter;
+	}
+
+	@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+	@GetMapping("/history/latest")
+	public ApiResponse<?> getLatestAdvice(HttpSession session) {
+		UserCert cert = (UserCert) session.getAttribute("cert");
+		if (cert == null) {
+			return ApiResponse.error("未登入，無法取得歷史建議");
+		}
+
+		// 用 accountId 找到對應的 User（注意不是用 cert.getAccountId() 當 userId）
+		User user = userRepository.findByAccount_Id(cert.getAccountId()).orElse(null);
+		if (user == null) {
+			return ApiResponse.error("找不到對應的使用者");
+		}
+
+		// 用正確 user.id 查詢歷史紀錄
+		AdviceHistory latest = adviceHistoryRepository.findTopByUser_IdOrderByCreatedAtDesc(user.getId());
+
+		if (latest == null) {
+			return ApiResponse.success("尚無建議紀錄", null);
+		}
+
+		return ApiResponse.success("查詢成功", Map.of("inputContext", latest.getInputContext(), "generatedAdvice",
+				latest.getGeneratedAdvice(), "createdAt", latest.getCreatedAt()));
 	}
 }

@@ -10,4 +10,6 @@ public interface AdviceHistoryRepository extends JpaRepository<AdviceHistory, In
 
 	// 查詢某位使用者的建議歷史（由新到舊）
 	List<AdviceHistory> findByUser_IdOrderByCreatedAtDesc(Integer userId);
+
+	AdviceHistory findTopByUser_IdOrderByCreatedAtDesc(Integer userId);
 }
