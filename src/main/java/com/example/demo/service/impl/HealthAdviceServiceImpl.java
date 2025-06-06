@@ -40,23 +40,23 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 	@Override
 	public String generatePrompt(double height, double weight, int age, String goal) {
 		double bmi = weight / Math.pow(height / 100.0, 2);
-		return String.format("""
-				你是一位健康建議助理，請直接以繁體中文回覆下列內容，**禁止輸出任何 <think> 或思考過程的內容。**
+		return String.format(
+				"""
+						你是一位健康建議助理，請直接以繁體中文回覆下列內容，**禁止輸出任何 <think> 或思考過程的內容。**
 
-				使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f，目標：%s。
+						使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f，目標：%s。
 
-				請提供簡潔明確的「飲食建議」與「運動建議」，用條列式清楚說明，每一段開頭請加上「• 」，段落之間請換行，內容請符合以下格式：
+						請提供簡潔明確的「飲食建議」與「運動建議」，回覆請依照以下格式列出，每一段開頭請加上「•」，段落之間請換行（不要連在一起），內容請使用 Markdown 格式，總字數限制在 500 字以內，語氣請自然、像台灣人在說話。
 
-				- 根據 BMI 給出每日建議攝取熱量（大卡）區間
-				- 加入每日建議飲水量（毫升）
-				- 飲食建議：列出幾項主要原則或建議食材，包含澱粉、蛋白質、蔬菜等
-				- 運動建議：提供簡單好執行的日常運動與時間建議
-				- 每個段落都加一個「•」，段落之間請換行不要黏在一起
-				- 回覆請使用 Markdown 格式
-				- 總字數請壓在 500 字以內
-				- 請使用台灣人說話方式
-				- **只輸出建議內容，不要輸出任何 <think>、開場白、或思考過程**
-				""", age, height, weight, bmi, goal);
+						請依以下順序提供內容：
+						1. 根據 BMI 給出每日建議攝取熱量（大卡）區間
+						2. 建議每日飲水量（毫升）
+						3. 飲食建議：列出幾項主要原則與建議食材（包含澱粉、蛋白質、蔬菜等）
+						4. 運動建議：提供簡單、好執行的日常運動與建議時間
+
+						**請只輸出建議內容，不要加入 <think>、開場白、或其他說明**
+						""",
+				age, height, weight, bmi, goal);
 	}
 
 	@Override

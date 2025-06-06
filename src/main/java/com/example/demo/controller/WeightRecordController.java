@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -77,11 +78,16 @@ public class WeightRecordController {
 
 	// 查詢最新一筆紀錄
 	@GetMapping("/latest")
-	public ApiResponse<WeightRecordDTO> getLatestRecord(HttpSession session) { // 定義一個方法 getLatestRecord
+	public ApiResponse<?> getLatestRecord(HttpSession session) { // 定義一個方法 getLatestRecord
 		// 回傳型別是 ApiResponse<WeightRecordDTO>，也就是「一個包裝好的回應物件」，裡面放著
 		// WeightRecordDTO（前端要的資料格式）
-		Integer accountId = (Integer) session.getAttribute("accountId"); // 取得目前登入者的帳號 ID
-		WeightRecordDTO latest = weightRecordService.getLatestRecordByAccountId(accountId); // 根據帳號查詢最新一筆體重資料（已轉為 DTO）
-		return ApiResponse.success("查詢成功", latest); // 封裝成統一回應格式（訊息＋資料）
+		Integer accountId = (Integer) session.getAttribute("accountId");
+		Optional<WeightRecordDTO> latestOpt = weightRecordService.getLatestRecordByAccountId(accountId);
+
+		if (latestOpt.isPresent()) {
+			return ApiResponse.success("查詢成功", latestOpt.get());
+		} else {
+			return ApiResponse.success("尚無紀錄", null); // ✅ 回傳成功但 data 為 null
+		}
 	}
 }

@@ -77,7 +77,7 @@ public class AuthController {
 
 		// 發送驗證信
 		String confirmUrl = "http://localhost:8082/rest/health/email/confirm?username=" + request.getUsername();
-		emailService.sendEmail(request.getEmail(), "請點擊驗證連結：" + confirmUrl);
+		emailService.sendEmail(request.getEmail(), request.getUsername()); // ✅ 正確：傳入純 username
 
 		// 回傳訊息與登入資料
 		return ResponseEntity.ok(Map.of("message", "註冊成功，請至信箱驗證帳號", "user", request.getUsername()));

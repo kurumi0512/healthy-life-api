@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,16 +105,11 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 
 	// 取得最新一筆紀錄(要串在AI上但還沒用)
 	@Override
-	public WeightRecordDTO getLatestRecordByAccountId(Integer accountId) {
-		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
-
-		WeightRecord latest = weightRecordRepository.findTopByUser_IdOrderByCreatedAtDesc(user.getId());
-
-		if (latest == null) {
-			throw new RuntimeException("尚無體重紀錄");
-		}
-
-		return weightMapper.toDto(latest);
+	public Optional<WeightRecordDTO> getLatestRecordByAccountId(Integer accountId) {
+		return userRepository.findByAccount_Id(accountId).flatMap(user -> {
+			WeightRecord latest = weightRecordRepository.findTopByUser_IdOrderByCreatedAtDesc(user.getId());
+			return Optional.ofNullable(latest).map(weightMapper::toDto);
+		});
 	}
 
 	// 自訂欄位驗證方法

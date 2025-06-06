@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.model.dto.WeightRecordDTO;
 
@@ -15,5 +16,5 @@ public interface WeightRecordService {
 
 	List<WeightRecordDTO> getRecent5RecordsByAccountId(Integer accountId);
 
-	WeightRecordDTO getLatestRecordByAccountId(Integer accountId);
+	Optional<WeightRecordDTO> getLatestRecordByAccountId(Integer accountId);
 }
