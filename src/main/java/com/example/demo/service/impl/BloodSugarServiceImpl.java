@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.aop.CheckNotes;
 import com.example.demo.mapper.BloodSugarMapper;
 import com.example.demo.model.dto.BloodSugarRecordDTO;
 import com.example.demo.model.entity.BloodSugarRecord;
@@ -27,6 +28,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	private UserRepository userRepository;
 
 	@Override
+	@CheckNotes
 	public void save(BloodSugarRecordDTO dto) {
 		User user = userRepository.findByAccount_Id(dto.getAccountId())
 				.orElseThrow(() -> new RuntimeException("找不到使用者"));

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.aop.CheckNotes;
 import com.example.demo.mapper.BloodPressureMapper;
 import com.example.demo.model.dto.BloodPressureRecordDTO;
 import com.example.demo.model.entity.BloodPressureRecord;
@@ -28,6 +29,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
 
 	// 根據 accountId 取得使用者（User）物件
 	@Override
+	@CheckNotes
 	public void saveRecord(BloodPressureRecordDTO dto) {
 		User user = userRepository.findByAccount_Id(dto.getAccountId())
 				.orElseThrow(() -> new RuntimeException("找不到使用者"));
@@ -62,13 +64,16 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
 
 	// 更新資料
 	@Override
+	@CheckNotes
 	public void updateRecord(BloodPressureRecordDTO dto) {
 		BloodPressureRecord record = bpRecordRepository.findById(dto.getRecordId())
 				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
+
 		// 確認是否為此使用者的紀錄
 		if (!record.getUser().getAccount().getId().equals(dto.getAccountId())) {
 			throw new RuntimeException("無權修改此紀錄");
 		}
+
 		// 更新資料欄位
 		record.setSystolic(dto.getSystolic());
 		record.setDiastolic(dto.getDiastolic());

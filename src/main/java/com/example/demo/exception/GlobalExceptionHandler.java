@@ -37,4 +37,10 @@ public class GlobalExceptionHandler {
 		// HTTP 狀態碼為 400 Bad Request。
 		// 回傳統一格式的 JSON 錯誤回應給前端。
 	}
+
+	@ExceptionHandler(BadNoteException.class)
+	public ResponseEntity<ApiResponse<Object>> handleBadNote(BadNoteException e) {
+		// 回傳乾淨一致的錯誤格式（使用你自己的 ApiResponse 類）
+		return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+	}
 }
