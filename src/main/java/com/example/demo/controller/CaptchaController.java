@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
@@ -16,33 +18,66 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-//圖形驗證碼產生器
-@RestController // REST 控制器
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") // 跨域請求
+@RestController
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class CaptchaController {
 
 	@GetMapping("/rest/health/captcha")
 	public void getCaptcha(HttpServletResponse response, HttpSession session) throws IOException {
-		// 產生四位數驗證碼（1000~9999）
 		String code = String.valueOf(new Random().nextInt(9000) + 1000);
-		session.setAttribute("captcha", code); // 儲存到 Session
+		session.setAttribute("captcha", code);
 
-		// 建立圖片物件與畫布
-		int width = 100, height = 40;
+		int width = 120, height = 40;
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		Graphics g = image.getGraphics(); // 取得畫筆G來畫東西
+		Graphics2D g = image.createGraphics();
 
-		// 背景與字體樣式
-		g.setColor(Color.WHITE); // 白色背景
-		g.fillRect(0, 0, width, height); // 設定黑色字體,粗體字
-		g.setColor(Color.BLACK);
-		g.setFont(new Font("Arial", Font.BOLD, 28));
-		g.drawString(code, 22, 30); // X 與 Y 座標要對齊
+		// 抗鋸齒
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// 加入干擾線條
-		g.setColor(Color.RED);
+		// 背景色
+		g.setColor(new Color(255, 255, 240));
+		g.fillRect(0, 0, width, height);
+
+		// 雜訊點（小圓點）
 		Random rand = new Random();
-		for (int i = 0; i < 25; i++) { // 畫 25 條紅色干擾線，增加辨識困難度，防止機器辨識圖片內容
+		for (int i = 0; i < 30; i++) {
+			int x = rand.nextInt(width);
+			int y = rand.nextInt(height);
+			int r = rand.nextInt(256);
+			int gColor = rand.nextInt(256);
+			int b = rand.nextInt(256);
+			g.setColor(new Color(r, gColor, b, 150));
+			g.fillRect(x, y, 1, 1);
+		}
+
+		// 字體與樣式
+		g.setFont(new Font("Arial", Font.BOLD, 30));
+
+		for (int i = 0; i < code.length(); i++) {
+			// 隨機顏色
+			int r = rand.nextInt(200);
+			int gColor = rand.nextInt(200);
+			int b = rand.nextInt(200);
+			g.setColor(new Color(r, gColor, b));
+
+			// 隨機旋轉角度 ±15 度
+			double angle = Math.toRadians(rand.nextInt(30) - 15);
+			g.rotate(angle, 25 + i * 20, 25); // 中心點旋轉
+
+			// 畫出字
+			g.drawString(String.valueOf(code.charAt(i)), 20 + i * 20, 30);
+
+			// 畫完後轉回原位
+			g.rotate(-angle, 25 + i * 20, 25);
+		}
+
+		// 淡色干擾線
+		g.setStroke(new BasicStroke(1f));
+		for (int i = 0; i < 6; i++) {
+			int r = rand.nextInt(150) + 100;
+			int gColor = rand.nextInt(150) + 100;
+			int b = rand.nextInt(150) + 100;
+			g.setColor(new Color(r, gColor, b, 100));
 			int x1 = rand.nextInt(width);
 			int y1 = rand.nextInt(height);
 			int x2 = rand.nextInt(width);
@@ -50,7 +85,8 @@ public class CaptchaController {
 			g.drawLine(x1, y1, x2, y2);
 		}
 
-		// 回傳 JPEG 圖片
+		g.dispose();
+
 		response.setContentType("image/jpeg");
 		ImageIO.write(image, "JPEG", response.getOutputStream());
 	}
