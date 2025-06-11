@@ -51,6 +51,13 @@
 		    <artifactId>jakarta.mail</artifactId>
 		    <version>2.0.1</version>
 		</dependency>
+		
+		<!-- JWT -->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+	    	<artifactId>nimbus-jose-jwt</artifactId>
+	    	<version>9.15.1</version>
+		</dependency>
 			
 	    <!-- JdbcTemplate (JDBC 豪華昇級版)  -->
 	   <!-- <dependency>

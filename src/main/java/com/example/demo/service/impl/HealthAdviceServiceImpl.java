@@ -60,6 +60,32 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 	}
 
 	@Override
+	public String generatePrompt(double height, double weight, int age, String goal, String mode) {
+		double bmi = weight / Math.pow(height / 100.0, 2);
+		switch (mode) {
+		case "diet":
+			return String.format("""
+					你是一位營養師，請用繁體中文回覆以下健康問題：
+					使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f。
+					請給予每日飲食建議，列出幾個原則，限制 200 字以內。
+					""", age, height, weight, bmi);
+
+		case "exercise":
+			return String.format("""
+					你是一位健身教練，請用繁體中文回覆以下健康問題：
+					使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f。
+					請給予日常運動建議，包括建議的類型與時間安排，限制 200 字以內。
+					""", age, height, weight, bmi);
+
+		default: // goal 模式
+			return String.format("""
+					使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f，問題是：「%s」。
+					請用繁體中文提供清楚、簡潔的健康建議，字數不超過 200 字。
+					""", age, height, weight, bmi, goal);
+		}
+	}
+
+	@Override
 	public boolean shouldDisplayWord(String word, boolean[] insideThinkBlock) {
 		if (word.contains("<think>")) {
 			insideThinkBlock[0] = true;

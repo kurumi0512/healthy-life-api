@@ -40,12 +40,15 @@ public class HealthAdviceAIController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@GetMapping(value = "/advice-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE) // 告訴前端這是「SSE串流格式」的回應
+	// 告訴前端這是「SSE串流格式」的回應
 	// 單向串流通訊技術，讓「伺服器主動把資料持續推送給前端瀏覽器
+	@GetMapping(value = "/advice-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter getAdviceStream(@RequestParam double height, @RequestParam double weight, @RequestParam int age,
-			@RequestParam String goal, HttpSession session) {
+			@RequestParam String goal, @RequestParam(defaultValue = "goal") String mode, // ✅ 新增
+			HttpSession session) {
 
-		String prompt = healthAdviceService.generatePrompt(height, weight, age, goal);
+		String prompt = healthAdviceService.generatePrompt(height, weight, age, goal, mode);
+
 		SseEmitter emitter = new SseEmitter(0L); // 0L 表示永不超時
 		final boolean[] insideThinkBlock = { false };
 
