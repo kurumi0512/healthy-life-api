@@ -97,25 +97,30 @@ public class AuthController {
 	// 接收 JSON 格式的登入資料
 	// 登入時驗證 session 中的驗證碼
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
-		String sessionCode = (String) session.getAttribute("captcha");
+	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, BindingResult result,
+			HttpSession session) {
 
+		// 驗證格式錯誤
+		if (result.hasErrors()) {
+			String message = result.getAllErrors().get(0).getDefaultMessage();
+			return ResponseEntity.badRequest().body(Map.of("message", message));
+		}
+
+		String sessionCode = (String) session.getAttribute("captcha");
 		// 比較使用者輸入的驗證碼是否和 session 中的相同（不區分大小寫）
 		// 錯誤就回傳 HTTP 401 未授權
 		if (sessionCode == null || !sessionCode.equalsIgnoreCase(request.getCaptcha())) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "驗證碼錯誤"));
 		}
-
 		// authService.validate(...)：調用驗證服務，確認帳號密碼正確。
 		try {
 			UserCert cert = authService.validate(request.getUsername(), request.getPassword());
-
 			session.setAttribute("cert", cert);
 			session.setAttribute("user", cert.getUsername());
 			session.setAttribute("accountId", cert.getAccountId());
-			// 如果成功，就將重要資料（cert物件、帳號名稱、accountId）放入 session 中。
 			return ResponseEntity.ok(Map.of("message", "登入成功", "user", cert));
 		} catch (CertException e) {
+			// 如果成功，就將重要資料（cert物件、帳號名稱、accountId）放入 session 中。
 			return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
 		}
 	}
