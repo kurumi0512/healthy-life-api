@@ -8,5 +8,9 @@ public interface HealthAdviceService {
 
 	void saveAdviceRecord(Integer userId, String input, String advice);
 
+	public String getAdvice(double height, double weight, int age, String goal);
+
+	public String getAdvice(double height, double weight, int age, String goal, String mode);
+
 	boolean shouldDisplayWord(String word, boolean[] insideThinkBlock);
 }

@@ -55,51 +55,68 @@ public class HealthAdviceAIController {
 		// 用來累積完整建議文字
 		StringBuilder fullAdvice = new StringBuilder();
 
-		chatClient.prompt().user(prompt).stream().content().subscribe(message -> { // 用 Spring AI 的 ChatClient 呼叫 AI
-			// .stream().content().subscribe(...)：進入 串流模式，逐句接收 AI 的回覆。
-			try {
-				System.out.println("✅ AI 回傳片段：" + message);
+		chatClient.prompt()
+				.system("""
+						你是一位健康建議助理，請直接以繁體中文回覆下列內容，**禁止輸出任何 <think> 或思考過程的內容。**
 
-				if (message != null && !message.trim().isEmpty()
-						&& healthAdviceService.shouldDisplayWord(message, insideThinkBlock)) {
+								使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f，目標：%s。
 
-					// 過濾 AI 偷輸出的開場白或雜訊
-					String cleanMsg = message.trim().replace("•", "\n•") // 小黑點前加換行
-							.replaceAll("\n", "\n\n"); // 將單換行變雙換行讓段落更清晰
+								請提供簡潔明確的「飲食建議」與「運動建議」，回覆請依照以下格式列出，每一段開頭請加上「•」，段落之間請換行（不要連在一起），內容請使用 Markdown 格式，總字數限制在 500 字以內，語氣請自然、像台灣人在說話。
 
-					fullAdvice.append(cleanMsg); // 加入完整建議內容
-					emitter.send(cleanMsg); // 送出這段格式化後的內容到前端
-				}
-			} catch (IOException e) {
-				emitter.completeWithError(e);
-			}
-		}, error -> {
-			emitter.completeWithError(error);
-		}, () -> {
-			try {
-				emitter.send("[DONE]"); // 表示串流結束，通知前端不再送新資料
-				emitter.complete();
+								請依以下順序提供內容：
+								1. 根據 BMI 給出每日建議攝取熱量（大卡）區間
+								2. 建議每日飲水量（毫升）
+								3. 飲食建議：列出幾項主要原則與建議食材（包含澱粉、蛋白質、蔬菜等）
+								4. 運動建議：提供簡單、好執行的日常運動與建議時間
 
-				// 串流完成後儲存到資料庫
-				UserCert cert = (UserCert) session.getAttribute("cert");
-				if (cert != null) {
-					User user = userRepository.findByAccount_Id(cert.getAccountId()).orElse(null);// 從 Session
-																									// 取出登入使用者資訊（UserCert
-																									// 是自訂的登入資訊）
-					if (user != null) {
-						healthAdviceService.saveAdviceRecord(user.getId(), prompt, fullAdvice.toString()); // 將建議內容（prompt
-																											// +
-																											// 回覆）儲存進資料庫，對應到使用者
-					} else {
-						System.out.println("⚠️ 找不到對應的使用者");
+								**請只輸出建議內容，不要加入 <think>、開場白、或其他說明**
+
+						""")
+				.user(prompt).stream().content().subscribe(message -> { // 用 Spring AI 的 ChatClient 呼叫 AI
+					// .stream().content().subscribe(...)：進入 串流模式，逐句接收 AI 的回覆。
+					try {
+						System.out.println("✅ AI 回傳片段：" + message);
+
+						if (message != null && !message.trim().isEmpty()
+								&& healthAdviceService.shouldDisplayWord(message, insideThinkBlock)) {
+
+							// 過濾 AI 偷輸出的開場白或雜訊
+							String cleanMsg = message.trim().replace("•", "\n•") // 小黑點前加換行
+									.replaceAll("\n", "\n\n"); // 將單換行變雙換行讓段落更清晰
+
+							fullAdvice.append(cleanMsg); // 加入完整建議內容
+							emitter.send(cleanMsg); // 送出這段格式化後的內容到前端
+						}
+					} catch (IOException e) {
+						emitter.completeWithError(e);
 					}
-				} else {
-					System.out.println("⚠️ 無登入資訊，略過儲存建議紀錄");
-				}
-			} catch (IOException e) {
-				emitter.completeWithError(e);
-			}
-		});
+				}, error -> {
+					emitter.completeWithError(error);
+				}, () -> {
+					try {
+						emitter.send("[DONE]"); // 表示串流結束，通知前端不再送新資料
+						emitter.complete();
+
+						// 串流完成後儲存到資料庫
+						UserCert cert = (UserCert) session.getAttribute("cert");
+						if (cert != null) {
+							User user = userRepository.findByAccount_Id(cert.getAccountId()).orElse(null);// 從 Session
+																											// 取出登入使用者資訊（UserCert
+																											// 是自訂的登入資訊）
+							if (user != null) {
+								healthAdviceService.saveAdviceRecord(user.getId(), prompt, fullAdvice.toString()); // 將建議內容（prompt
+																													// +
+																													// 回覆）儲存進資料庫，對應到使用者
+							} else {
+								System.out.println("⚠️ 找不到對應的使用者");
+							}
+						} else {
+							System.out.println("⚠️ 無登入資訊，略過儲存建議紀錄");
+						}
+					} catch (IOException e) {
+						emitter.completeWithError(e);
+					}
+				});
 		return emitter;
 	}
 

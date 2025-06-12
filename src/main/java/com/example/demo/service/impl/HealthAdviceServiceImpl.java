@@ -116,4 +116,16 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 		adviceHistoryRepository.save(history);
 	}
 
+	@Override
+	public String getAdvice(double height, double weight, int age, String goal) {
+		String prompt = generatePrompt(height, weight, age, goal);
+		return chatClient.prompt().user(prompt).call().content();
+	}
+
+	@Override
+	public String getAdvice(double height, double weight, int age, String goal, String mode) {
+		String prompt = generatePrompt(height, weight, age, goal, mode);
+		return chatClient.prompt().user(prompt).call().content();
+	}
+
 }
