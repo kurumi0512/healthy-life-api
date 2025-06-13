@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import com.example.demo.response.ApiResponse;
 import com.example.demo.service.impl.BloodPressureRecordServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/rest/health/bp")
@@ -32,26 +34,34 @@ public class BloodPressureRecordController {
 
 	// 新增血壓紀錄,null表示不回傳實際的資料
 	@PostMapping
-	public ApiResponse<?> saveRecord(@RequestBody BloodPressureRecordDTO dto, HttpSession session) {
+	public ApiResponse<?> saveRecord(@Valid @RequestBody BloodPressureRecordDTO dto, BindingResult result,
+			HttpSession session) {
 		try {
-			Integer accountId = (Integer) session.getAttribute("accountId");
+			// 1️⃣ 表單驗證失敗就立即回傳錯誤訊息
+			if (result.hasErrors()) {
+				String message = result.getAllErrors().get(0).getDefaultMessage();
+				return ApiResponse.error("輸入錯誤：" + message);
+			}
 
+			// 2️⃣ 檢查登入狀態
+			Integer accountId = (Integer) session.getAttribute("accountId");
 			if (accountId == null) {
 				return ApiResponse.error("未登入，請重新登入後再嘗試");
 			}
 
+			// 3️⃣ 設定帳號與預設日期
 			dto.setAccountId(accountId);
-
-			// 若日期沒填，預設為今天
 			if (dto.getRecordDate() == null) {
 				dto.setRecordDate(LocalDate.now());
 			}
 
+			// 4️⃣ 執行新增邏輯
 			bpRecordService.saveRecord(dto);
 
 			return ApiResponse.success("新增成功", null);
+
 		} catch (Exception e) {
-			e.printStackTrace(); // 顯示詳細錯誤（方便 Debug）
+			e.printStackTrace();
 			return ApiResponse.error("新增失敗：" + e.getMessage());
 		}
 	}
