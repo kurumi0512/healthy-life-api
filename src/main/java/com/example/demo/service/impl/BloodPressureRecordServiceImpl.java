@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,7 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
 
 		validateBloodPressure(record);
 		bpRecordRepository.save(record);
+		System.out.println("📝 使用者選擇的日期：" + dto.getRecordDate());
 	}
 
 	@Override
@@ -69,20 +69,19 @@ public class BloodPressureRecordServiceImpl implements BloodPressureRecordServic
 		BloodPressureRecord record = bpRecordRepository.findById(dto.getRecordId())
 				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
 
-		// 確認是否為此使用者的紀錄
 		if (!record.getUser().getAccount().getId().equals(dto.getAccountId())) {
 			throw new RuntimeException("無權修改此紀錄");
 		}
 
-		// 更新資料欄位
 		record.setSystolic(dto.getSystolic());
 		record.setDiastolic(dto.getDiastolic());
 		record.setNotes(dto.getNotes());
+
+		// ✅ 只有使用者有選日期時才更新
 		if (dto.getRecordDate() != null) {
 			record.setRecordDate(dto.getRecordDate());
-		} else {
-			record.setRecordDate(LocalDate.now());
 		}
+
 		validateBloodPressure(record);
 		bpRecordRepository.save(record);
 	}

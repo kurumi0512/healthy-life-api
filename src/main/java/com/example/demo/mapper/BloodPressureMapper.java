@@ -1,6 +1,5 @@
 package com.example.demo.mapper;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,12 +37,11 @@ public class BloodPressureMapper {
 	public BloodPressureRecord toEntityWithDefaults(BloodPressureRecordDTO dto) {
 		BloodPressureRecord entity = modelMapper.map(dto, BloodPressureRecord.class);
 
-		// 若前端未傳日期，預設今天
-		if (dto.getRecordDate() == null) {
-			entity.setRecordDate(LocalDate.now());
-		} else {
+		// ✅ 僅在前端有傳入日期時才設定
+		if (dto.getRecordDate() != null) {
 			entity.setRecordDate(dto.getRecordDate());
 		}
-		return entity; // 👈 少了這行就會編譯錯誤
+
+		return entity;
 	}
 }

@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +46,6 @@ public class BloodPressureRecordController {
 			Integer accountId = (Integer) session.getAttribute("accountId");
 			if (accountId == null) {
 				return ApiResponse.error("未登入，請重新登入後再嘗試");
-			}
-
-			// 3️⃣ 設定帳號與預設日期
-			dto.setAccountId(accountId);
-			if (dto.getRecordDate() == null) {
-				dto.setRecordDate(LocalDate.now());
 			}
 
 			// 4️⃣ 執行新增邏輯
