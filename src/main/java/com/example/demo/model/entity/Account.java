@@ -60,4 +60,7 @@ public class Account {
 	public void onCreate() {
 		this.createTime = LocalDateTime.now();
 	}
+
+	@Column(name = "reset_secret")
+	private String resetSecret;
 }

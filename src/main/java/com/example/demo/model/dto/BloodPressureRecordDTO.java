@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -25,7 +25,7 @@ public class BloodPressureRecordDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate recordDate;
 
-	@Size(max = 50, message = "備註最多 50 字")
+	@Column(nullable = true)
 	private String notes;
 
 	private Integer accountId; // 從 session 裡補上

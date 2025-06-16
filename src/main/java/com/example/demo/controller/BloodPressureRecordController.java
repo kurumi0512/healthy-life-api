@@ -48,6 +48,7 @@ public class BloodPressureRecordController {
 				return ApiResponse.error("未登入，請重新登入後再嘗試");
 			}
 
+			dto.setAccountId(accountId);
 			// 4️⃣ 執行新增邏輯
 			bpRecordService.saveRecord(dto);
 

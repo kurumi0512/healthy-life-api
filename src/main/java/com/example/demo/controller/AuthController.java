@@ -185,4 +185,42 @@ public class AuthController {
 		AccountResponseDTO dto = AccountMapper.toResponseDTO(account);
 		return ResponseEntity.ok(dto);
 	}
+
+	@PostMapping("/forgot-password/send")
+	public ResponseEntity<?> sendResetCode(@RequestBody Map<String, String> body) {
+		String email = body.get("email");
+		try {
+			accountService.sendResetCode(email); // 呼叫剛剛建立的 Service 方法
+			return ResponseEntity.ok(Map.of("message", "驗證碼已寄出，請至信箱查收"));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "寄送失敗：" + e.getMessage()));
+		}
+	}
+
+	@PostMapping("/forgot-password/verify")
+	public ResponseEntity<?> verifyResetCode(@RequestBody Map<String, String> body) {
+		String email = body.get("email");
+		String code = body.get("code");
+
+		boolean valid = accountService.verifyResetCode(email, code);
+		if (valid) {
+			return ResponseEntity.ok(Map.of("message", "驗證成功，請輸入新密碼"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "驗證碼錯誤或已過期"));
+		}
+	}
+
+	@PostMapping("/forgot-password/reset")
+	public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> body) {
+		String email = body.get("email");
+		String newPassword = body.get("newPassword");
+
+		try {
+			accountService.resetPassword(email, newPassword);
+			return ResponseEntity.ok(Map.of("message", "密碼已成功重設"));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "密碼重設失敗：" + e.getMessage()));
+		}
+	}
+
 }
