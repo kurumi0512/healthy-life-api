@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,6 +52,17 @@ public class FoodServiceImpl implements FoodService {
 			return Double.compare(b.getProteinPer100g(), a.getProteinPer100g()); // 再比蛋白質含量
 		});
 
+		// ✅ 新增這段：每類別內打亂順序，讓每次建議都不同
+		Map<String, List<Food>> grouped = new HashMap<>();
+		for (Food food : foods) {
+			grouped.computeIfAbsent(food.getCategory(), k -> new ArrayList<>()).add(food);
+		}
+		foods.clear();
+		grouped.forEach((category, foodList) -> {
+			Collections.shuffle(foodList); // 每類內隨機
+			foods.addAll(foodList); // 加回主清單
+		});
+
 		List<Map<String, Object>> result = new ArrayList<>();
 		Map<String, Integer> categoryCount = new HashMap<>();
 		double remaining = targetProtein;
@@ -75,7 +87,8 @@ public class FoodServiceImpl implements FoodService {
 			double portion = Math.min(suggestedPortion, maxPortion);
 			double protein = (proteinPer100g * portion) / 100;
 
-			if (protein <= 0)
+			// 🧤 過濾蛋白質為 0 或建議攝取量太少的食物（如 portion < 10g）
+			if (portion < 10 || protein <= 0)
 				continue;
 
 			Map<String, Object> item = new HashMap<>();
