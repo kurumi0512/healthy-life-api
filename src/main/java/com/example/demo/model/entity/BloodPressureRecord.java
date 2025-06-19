@@ -20,24 +20,24 @@ import lombok.Data;
 @Data
 public class BloodPressureRecord {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id // 主鍵
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 自動遞增
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@ManyToOne // 多筆血壓紀錄對應一位使用者
+	@JoinColumn(name = "user_id") // 對應的外鍵欄位名稱為 user_id
 	private User user;
 
-	private Integer systolic;
+	private Integer systolic; // 收縮壓（高壓）
 
-	private Integer diastolic;
+	private Integer diastolic; // 舒張壓（低壓）
 
-	@Column(name = "record_date")
-	private LocalDate recordDate; // 使用者輸入的血壓測量日期
+	@Column(name = "record_date") // 紀錄實際量測日期
+	private LocalDate recordDate;
 
-	private String notes; // 備註欄（可選填）
+	private String notes; // 備註（使用者可填寫）
 
-	@Column(name = "created_at", updatable = false)
-	@CreationTimestamp
-	private LocalDateTime createdAt; // 系統自動記錄建立時間
+	@Column(name = "created_at", updatable = false) // 建立時自動填入，不能修改
+	@CreationTimestamp // 系統自動加入紀錄建立時間
+	private LocalDateTime createdAt;
 }

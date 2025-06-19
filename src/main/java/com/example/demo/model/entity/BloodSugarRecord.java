@@ -16,19 +16,21 @@ import lombok.Data;
 @Table(name = "blood_sugar_record")
 @Data
 public class BloodSugarRecord {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	@Id // 主鍵
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 自動遞增
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@ManyToOne // 多筆血糖紀錄對應一位使用者
+	@JoinColumn(name = "user_id") // 外鍵欄位為 user_id
 	private User user;
 
-	private Double fasting;
-	private Double postMeal;
+	private Double fasting; // 空腹血糖值
 
-	@Column(name = "record_date")
+	private Double postMeal; // 餐後血糖值
+
+	@Column(name = "record_date") // 血糖量測日期
 	private LocalDate recordDate;
 
-	private String notes;
+	private String notes; // 備註欄（可選填）
 }
