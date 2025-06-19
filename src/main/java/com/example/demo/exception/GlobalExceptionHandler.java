@@ -8,24 +8,22 @@ import com.example.demo.response.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-//Spring Boot 全域例外處理機制,統一處理控制器中可能發生的例外錯誤，避免每個 Controller 都重複寫 try-catch
-
+//全域例外處理類別：處理所有 Controller 層發生的例外，避免重複寫 try-catch
 @ControllerAdvice // 全域異常處理註解
 public class GlobalExceptionHandler {
 
-	// 當系統發生例外錯誤,寫Exception.class就所有Exception子類別發生的錯誤,都會來這邊處理
-
+	// 處理所有 Exception 類型的錯誤（保險處理）
 	@ExceptionHandler(Exception.class)
 	public Object handleException(HttpServletRequest request, Exception ex) {
 		String acceptHeader = request.getHeader("Accept");
 
-		// 若是 SSE 請求，不回傳 ApiResponse，讓 emitter.completeWithError() 處理
+		// 若是 SSE 請求（即 text/event-stream），不回傳錯誤 JSON，交給 emitter.completeWithError 處理
 		if (acceptHeader != null && acceptHeader.contains("text/event-stream")) {
 			ex.printStackTrace(); // 或 log.error(...)
 			return null;
 		}
 
-		// 否則仍走統一錯誤格式回傳
+		// 一般情況下，根據錯誤類別，組出一致的錯誤訊息
 		String errorMessage = ex.toString();
 		switch (ex.getClass().getSimpleName()) {
 		case "MethodArgumentTypeMismatchException":
@@ -36,12 +34,13 @@ public class GlobalExceptionHandler {
 			break;
 		}
 
+		// 使用自定義的 ApiResponse 統一錯誤回應格式
 		return ResponseEntity.badRequest().body(ApiResponse.error(errorMessage));
 	}
 
+	// 處理自訂的 BadNoteException（例如：備註內容不符限制）
 	@ExceptionHandler(BadNoteException.class)
 	public ResponseEntity<ApiResponse<Object>> handleBadNote(BadNoteException e) {
-		// 回傳乾淨一致的錯誤格式（使用你自己的 ApiResponse 類）
 		return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
 	}
 }

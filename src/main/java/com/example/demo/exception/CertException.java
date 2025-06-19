@@ -1,10 +1,11 @@
 package com.example.demo.exception;
 
-//宣告一個公開類別 CertException，它是繼承自 Exception（受檢例外 Checked Exception）。
-//表示這是需要用 try-catch 處理或在方法上宣告 throws 的例外。
+//自訂例外類別：CertException
+//繼承自 Exception，表示這是一個「受檢例外」（Checked Exception）
+//通常用於「憑證錯誤」等需要特別處理的情況，例如驗證失敗、簽章錯誤等
 
 public class CertException extends Exception {
 	public CertException(String message) {
-		super(message);
+		super(message); // 把錯誤訊息存進 Exception
 	}
 }

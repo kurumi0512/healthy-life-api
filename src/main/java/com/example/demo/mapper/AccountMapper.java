@@ -3,14 +3,15 @@ package com.example.demo.mapper;
 import com.example.demo.model.dto.AccountResponseDTO;
 import com.example.demo.model.entity.Account;
 
-//資料轉換 的用途
+// 資料轉換工具類（Entity → DTO）
 public class AccountMapper {
 
+	// 將 Account 實體轉成 AccountResponseDTO（給前端用）
 	public static AccountResponseDTO toResponseDTO(Account account) {
 		if (account == null)
-			return null;
+			return null; // 若為空，直接回傳 null
 
-		// 將 Account 實體中對應欄位的資料，逐一複製到 AccountResponseDTO 中
+		// 手動把欄位一一複製過去（只選擇前端需要的欄位）
 		AccountResponseDTO dto = new AccountResponseDTO();
 		dto.setId(account.getId());
 		dto.setUsername(account.getUsername());
@@ -20,6 +21,6 @@ public class AccountMapper {
 		dto.setLastLogin(account.getLastLogin());
 		dto.setStatus(account.getStatus());
 		dto.setRole(account.getRole());
-		return dto; // 回傳轉換完成的 DTO，供 Controller 或 Service 呼叫
+		return dto; // 回傳 DTO 給 Controller 或 Service 使用
 	}
 }

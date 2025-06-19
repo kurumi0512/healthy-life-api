@@ -8,6 +8,7 @@ import com.example.demo.model.entity.User;
 
 public class UserProfileMapper {
 
+	// Entity ➜ DTO（查詢時轉換）
 	public static UserProfileDto toDto(User user, String email) {
 		if (user == null)
 			return null;
@@ -20,11 +21,12 @@ public class UserProfileMapper {
 		dto.setGoal(user.getGoal());
 		dto.setHeight(user.getHeight());
 		dto.setTargetWeight(user.getTargetWeight());
-		dto.setAgeGroup(getAgeGroup(user.getBirthDate())); // ✅ 直接用出生年月計算
-		dto.setEmail(email);
+		dto.setAgeGroup(getAgeGroup(user.getBirthDate())); // 根據生日分類年齡層
+		dto.setEmail(email); // 外部額外傳入 email
 		return dto;
 	}
 
+	// DTO ➜ Entity（用戶更新時轉換）
 	public static void updateEntity(User user, UserProfileDto dto) {
 		if (user == null || dto == null)
 			return;
@@ -35,9 +37,10 @@ public class UserProfileMapper {
 		user.setGoal(dto.getGoal());
 		user.setHeight(dto.getHeight());
 		user.setTargetWeight(dto.getTargetWeight());
-		user.setAgeGroup(getAgeGroup(user.getBirthDate())); // ✅ 同樣重新設定
+		user.setAgeGroup(getAgeGroup(user.getBirthDate())); // 重新根據生日設定年齡層
 	}
 
+	// 根據生日計算年齡 → 分類年齡層
 	private static String getAgeGroup(LocalDate birthDate) {
 		if (birthDate == null)
 			return "";

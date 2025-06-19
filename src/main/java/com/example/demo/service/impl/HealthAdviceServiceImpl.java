@@ -18,25 +18,26 @@ import jakarta.annotation.PostConstruct;
 public class HealthAdviceServiceImpl implements HealthAdviceService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository userRepository; // 操作使用者資料表
 
 	@Autowired
-	private AdviceHistoryRepository adviceHistoryRepository;
+	private AdviceHistoryRepository adviceHistoryRepository; // 操作建議紀錄資料表
 
 	@Autowired
-	private ChatClient chatClient;
+	private ChatClient chatClient; // Spring AI 的聊天客戶端
 
-	// 預熱模型，避免第一次超慢
+	// 啟動時預先呼叫 AI 模型一次，避免第一次使用很慢
 	@PostConstruct
 	public void warmUpModel() {
 		try {
 			chatClient.prompt().user("請用繁體中文回覆：你好").call();
-			System.out.println("✅ AI 模型預熱完成");
+			System.out.println("AI 模型預熱完成");
 		} catch (Exception e) {
-			System.err.println("⚠️ 模型預熱失敗：" + e.getMessage());
+			System.err.println("模型預熱失敗：" + e.getMessage());
 		}
 	}
 
+	// 根據使用者輸入參數組成完整 prompt 給 AI（完整建議模式）
 	@Override
 	public String generatePrompt(double height, double weight, int age, String goal) {
 		double bmi = weight / Math.pow(height / 100.0, 2);
@@ -59,6 +60,7 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 				age, height, weight, bmi, goal);
 	}
 
+	// 依不同模式（diet/exercise/goal）組 prompt
 	@Override
 	public String generatePrompt(double height, double weight, int age, String goal, String mode) {
 		double bmi = weight / Math.pow(height / 100.0, 2);
@@ -85,6 +87,7 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 		}
 	}
 
+	// 過濾 <think> 思考區塊中的字，不顯示在畫面上
 	@Override
 	public boolean shouldDisplayWord(String word, boolean[] insideThinkBlock) {
 		if (word.contains("<think>")) {
@@ -98,30 +101,34 @@ public class HealthAdviceServiceImpl implements HealthAdviceService {
 		return !insideThinkBlock[0];
 	}
 
+	// 儲存健康建議紀錄（用 userId 查找 User）
 	@Override
 	public void saveAdviceRecord(Integer userId, String input, String advice) {
 		User user = userRepository.findById(userId).orElse(null);
 		if (user == null)
 			return;
-		saveAdviceRecord(user, input, advice); // ✅ 呼叫上面那個方法
+		saveAdviceRecord(user, input, advice);
 	}
 
+	// 儲存健康建議紀錄（用 User 實體）
 	public void saveAdviceRecord(User user, String prompt, String generatedAdvice) {
 		AdviceHistory history = new AdviceHistory();
 		history.setUser(user);
 		history.setInputContext(prompt);
 		history.setGeneratedAdvice(generatedAdvice);
 		history.setType("AI健康建議");
-		history.setCreatedAt(LocalDateTime.now()); // ➕ 時間
+		history.setCreatedAt(LocalDateTime.now()); // 建議生成時間
 		adviceHistoryRepository.save(history);
 	}
 
+	// 呼叫 AI 並取得建議（完整模式）
 	@Override
 	public String getAdvice(double height, double weight, int age, String goal) {
 		String prompt = generatePrompt(height, weight, age, goal);
 		return chatClient.prompt().user(prompt).call().content();
 	}
 
+	// 呼叫 AI 並取得建議（模式版）
 	@Override
 	public String getAdvice(double height, double weight, int age, String goal, String mode) {
 		String prompt = generatePrompt(height, weight, age, goal, mode);

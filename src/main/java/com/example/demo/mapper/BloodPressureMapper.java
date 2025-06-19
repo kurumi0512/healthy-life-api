@@ -14,30 +14,28 @@ import com.example.demo.model.entity.BloodPressureRecord;
 public class BloodPressureMapper {
 
 	@Autowired
-	private ModelMapper modelMapper; // 自動將相同欄位名稱的物件進行轉換的工具
+	private ModelMapper modelMapper; // 自動對應欄位名稱相同的屬性，簡化轉換邏輯
 
-	// Entity → DTO（傳給前端）,後端查到的資料（Entity）轉成給前端看的格式（DTO）
+	// Entity → DTO：後端查資料後轉換成給前端使用的格式
 	public BloodPressureRecordDTO toDto(BloodPressureRecord entity) {
 		return modelMapper.map(entity, BloodPressureRecordDTO.class);
 	}
 
-	// DTO → Entity（前端送進來要存資料庫）
+	// DTO → Entity：前端送資料過來要存資料庫時轉換成 Entity
 	public BloodPressureRecord toEntity(BloodPressureRecordDTO dto) {
 		return modelMapper.map(dto, BloodPressureRecord.class);
 	}
 
-	// List<Entity> ➡ List<DTO>（轉換多筆資料）
-	// 當你查詢出很多筆 BloodPressureRecord（例如近 7 筆資料），這個方法可以批次轉換成 DTO 給前端
+	// 多筆 Entity → 多筆 DTO（通常查詢列表資料時會用到）
 	public List<BloodPressureRecordDTO> toDtoList(List<BloodPressureRecord> entityList) {
 		return entityList.stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-	// DTO ➡ Entity + 預設值處理（進階版）
-
+	// 進階轉換：DTO → Entity 並處理預設值（例如只在日期不為 null 時才設定）
 	public BloodPressureRecord toEntityWithDefaults(BloodPressureRecordDTO dto) {
 		BloodPressureRecord entity = modelMapper.map(dto, BloodPressureRecord.class);
 
-		// ✅ 僅在前端有傳入日期時才設定
+		// 若DTO 有傳入日期，就設定到 Entity（避免預設值被覆蓋）
 		if (dto.getRecordDate() != null) {
 			entity.setRecordDate(dto.getRecordDate());
 		}
