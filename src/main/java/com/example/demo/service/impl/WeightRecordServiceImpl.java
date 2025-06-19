@@ -26,42 +26,47 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 	private UserRepository userRepository; // 查找使用者（用來確認紀錄屬於誰）
 
 	@Autowired
-	private WeightMapper weightMapper; // 負責 Entity 與 DTO 的轉換
+	private WeightMapper weightMapper; // 負責 Entity ↔ DTO 的轉換
 
+	// 儲存一筆體重紀錄（新增）
 	@Override
 	public void saveRecord(WeightRecordDTO dto) {
-		validateWeightRecord(dto); // 呼叫 validateWeightRecord 驗證欄位正確性
+		validateWeightRecord(dto); // 驗證欄位數值是否合理
 
-		// 預設記錄日期為今天
+		// 若使用者未指定記錄日期，預設為今天
 		if (dto.getRecordDate() == null) {
 			dto.setRecordDate(LocalDate.now());
 		}
 
+		// 根據帳號 ID 取得對應使用者
 		User user = userRepository.findByAccount_Id(dto.getAccountId())
-				.orElseThrow(() -> new RuntimeException("使用者不存在")); // 根據 dto.getAccountId() 查出對應的 User。
+				.orElseThrow(() -> new RuntimeException("使用者不存在"));
 
-		WeightRecord record = weightMapper.toEntity(dto); // 把 DTO 轉成 Entity，並補上 user 物件。
-		record.setUser(user); // 補上關聯
+		// 將 DTO 轉為 Entity 並設定對應的 User
+		WeightRecord record = weightMapper.toEntity(dto);
+		record.setUser(user);
 
+		// 儲存資料
 		weightRecordRepository.save(record);
 	}
 
-	// 取得某帳號所有體重紀錄（依紀錄日排序）
+	// 查詢某帳號的所有體重紀錄（依記錄日期由新到舊排序）
 	@Override
 	public List<WeightRecordDTO> getRecordsByAccountId(Integer accountId) {
-		// 用帳號 ID 找出該帳號的所有體重紀錄（由新到舊排序）。
-		// 使用 Mapper 將紀錄轉成 DTO 回傳前端。
 		List<WeightRecord> records = weightRecordRepository.findByUser_Account_IdOrderByRecordDateDesc(accountId);
 		return records.stream().map(weightMapper::toDto).collect(Collectors.toList());
 	}
 
-	// 更新指定紀錄
+	// 更新指定紀錄內容
 	@Override
 	public void updateRecord(WeightRecordDTO dto) {
-		validateWeightRecord(dto);
+		validateWeightRecord(dto); // 驗證欄位
+
+		// 找出原始紀錄
 		WeightRecord record = weightRecordRepository.findById(dto.getRecordId())
 				.orElseThrow(() -> new RuntimeException("紀錄不存在"));
 
+		// 驗證紀錄是否屬於該帳號（避免越權修改）
 		if (!record.getUser().getAccount().getId().equals(dto.getAccountId())) {
 			throw new RuntimeException("無權修改此紀錄");
 		}
@@ -71,16 +76,12 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 		record.setHeight(dto.getHeight());
 		record.setAge(dto.getAge());
 		record.setBmi(dto.getBmi());
-		if (dto.getRecordDate() != null) {
-			record.setRecordDate(dto.getRecordDate());
-		} else {
-			record.setRecordDate(LocalDate.now());
-		}
+		record.setRecordDate(dto.getRecordDate() != null ? dto.getRecordDate() : LocalDate.now());
 
 		weightRecordRepository.save(record);
 	}
 
-	// 刪除體重紀錄（要驗證是否為本人紀錄）
+	// 刪除指定紀錄（需驗證是否屬於該帳號）
 	@Override
 	public void deleteRecord(Integer recordId, Integer accountId) {
 		WeightRecord record = weightRecordRepository.findById(recordId)
@@ -93,7 +94,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 		weightRecordRepository.delete(record);
 	}
 
-	// 取得最近 5 筆紀錄（按建立時間排序）
+	// 查詢最近 5 筆體重紀錄（依建立時間排序）
 	@Override
 	public List<WeightRecordDTO> getRecent5RecordsByAccountId(Integer accountId) {
 		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("使用者不存在"));
@@ -103,7 +104,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 		return records.stream().map(weightMapper::toDto).collect(Collectors.toList());
 	}
 
-	// 取得最新一筆紀錄(要串在AI上但還沒用)
+	// 查詢最新一筆體重紀錄（供 AI 建議功能預設填入使用）
 	@Override
 	public Optional<WeightRecordDTO> getLatestRecordByAccountId(Integer accountId) {
 		return userRepository.findByAccount_Id(accountId).flatMap(user -> {
@@ -112,7 +113,7 @@ public class WeightRecordServiceImpl implements WeightRecordService {
 		});
 	}
 
-	// 自訂欄位驗證方法
+	// 自訂欄位驗證方法，避免不合理輸入
 	private void validateWeightRecord(WeightRecordDTO dto) {
 		if (dto.getHeight() < 50 || dto.getHeight() > 250) {
 			throw new IllegalArgumentException("身高必須介於 50～250 公分");

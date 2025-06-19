@@ -20,32 +20,29 @@ public class UserProfileServiceImpl implements UserProfileService {
 	@Autowired
 	private AccountRepository accountRepository; // 操作 Account 資料表
 
-	/**
-	 * 1.查詢 User 資料：透過 userRepository.findByAccount_Id(accountId) 查找與這個帳號綁定的使用者資料。
-	 * 2.查詢 Account 資料：取得這個帳號的基本資訊（特別是 email）。 3.封裝成
-	 * DTO：呼叫UserProfileMapper.toDto(...) 將 User + email 整合轉換成 UserProfileDto 傳給前端。
-	 * 
-	 */
-
+	// 取得個人資料（包含 email）
 	@Override
 	public UserProfileDto getProfile(Integer accountId) {
+		// 查找對應帳號的使用者資料
 		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("找不到個人資料"));
+
+		// 查找帳號資料（主要是 email）
 		Account account = accountRepository.findById(accountId).orElseThrow(() -> new RuntimeException("找不到帳號資料"));
 
-		return UserProfileMapper.toDto(user, account.getEmail()); // UserProfileMapper轉換,封裝成DTO
+		// 將 User + email 組合成 UserProfileDto 傳給前端
+		return UserProfileMapper.toDto(user, account.getEmail());
 	}
 
-//	查出目前登入者的 User 資料（根據 Account ID）
-//
-//	利用 UserProfileMapper 將 DTO 中的資料更新到 User Entity
-//
-//	儲存更新後的 User 資料
-
+	// 更新個人資料
 	@Override
 	public void updateProfile(Integer accountId, UserProfileDto dto) {
+		// 查出使用者資料
 		User user = userRepository.findByAccount_Id(accountId).orElseThrow(() -> new RuntimeException("找不到個人資料"));
 
-		UserProfileMapper.updateEntity(user, dto); // UserProfileMapper轉換
+		// 將前端送來的 DTO 內容更新進 user entity
+		UserProfileMapper.updateEntity(user, dto);
+
+		// 儲存更新後的 user 資料
 		userRepository.save(user);
 	}
 }

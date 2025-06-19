@@ -15,64 +15,61 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AuthService;
 import com.example.demo.util.HashUtil;
 
-//登入驗證（Login）
-//只專注在「登入流程」，就是負責你能不能進系統、登入後拿到什麼憑證。
 @Service
 public class AuthServiceImpl implements AuthService {
 
 	@Autowired
-	private AccountRepository accountRepository;
+	private AccountRepository accountRepository; // 操作帳號資料表（帳號、密碼、登入資訊）
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository userRepository; // 操作使用者基本資料表（姓名、生日等）
 
 	/**
-	 * 驗證帳號密碼，成功後回傳使用者憑證
-	 * 
-	 * @param username    使用者名稱
-	 * @param rawPassword 明文密碼
-	 * @return UserCert 登入後的憑證
-	 * @throws CertException 帳號或密碼錯誤
+	 * ✅ 登入流程核心邏輯 根據帳號與密碼驗證身份，成功後回傳 UserCert（登入憑證）
 	 */
-
-	// AuthService.validate() 登入用
-	// 只針對「已存在帳號」做 身份驗證
-	// 驗證密碼 → 更新登入時間 → 封裝 UserCert → 回傳
-	// 不做帳號建立、不處理 email 驗證、不改帳號狀態
 	@Override
 	public UserCert validate(String username, String rawPassword) throws CertException {
+		// 1️. 查詢帳號是否存在
 		Optional<Account> optAccount = accountRepository.findByUsername(username);
 		if (optAccount.isEmpty()) {
 			throw new CertException("帳號不存在");
 		}
 
 		Account account = optAccount.get();
-		String inputHash = HashUtil.hashPassword(rawPassword, account.getHashSalt());
 
+		// 2️. 將使用者輸入的明文密碼加鹽後雜湊，比對是否正確
+		String inputHash = HashUtil.hashPassword(rawPassword, account.getHashSalt());
 		if (!inputHash.equals(account.getHashPassword())) {
 			throw new CertException("密碼錯誤");
 		}
 
-		// ✅ 更新最後登入時間
+		// 3️. 登入成功 → 更新帳號的最後登入時間
 		account.setLastLogin(LocalDateTime.now());
 		accountRepository.save(account);
 
-		// ✅ 抓取對應 User 資料
+		// 4️. 取得對應的 User 資料（可能為 null，代表尚未補完個人資料）
 		User user = userRepository.findByAccount_Id(account.getId()).orElse(null);
 
-		// ✅ 封裝成 UserCert DTO 回傳
+		// 5️. 封裝成 UserCert，回傳前端
 		return toUserCert(account, user);
 	}
 
 	/**
-	 * 將 Account 與 User 資料轉換為 UserCert 憑證 DTO
+	 * 將帳號與使用者資料封裝為 UserCert DTO（登入憑證）
 	 */
 	private UserCert toUserCert(Account account, User user) {
+		// 判斷使用者是否已填完必要欄位（生日與性別）
 		boolean userCompleted = user != null && user.getBirthDate() != null && user.getGender() != null;
 
-		return new UserCert(account.getId(), account.getUsername(), account.getRole().name(),
-				user != null ? user.getName() : null, account.getEmail(), account.getCompleted(),
-				"ADMIN".equals(account.getRole().name()), userCompleted // ✅ 加入 userCompleted 欄位
+		// 組合回傳的憑證欄位內容
+		return new UserCert(account.getId(), // 帳號 ID
+				account.getUsername(), // 使用者名稱
+				account.getRole().name(), // 角色名稱（USER / ADMIN）
+				user != null ? user.getName() : null, // 姓名
+				account.getEmail(), // Email
+				account.getCompleted(), // 是否已驗證 email
+				"ADMIN".equals(account.getRole().name()), // 是否為管理員
+				userCompleted // 是否已補完個人資料
 		);
 	}
 }

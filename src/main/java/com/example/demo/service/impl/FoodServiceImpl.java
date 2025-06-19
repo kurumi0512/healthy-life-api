@@ -18,14 +18,15 @@ import com.example.demo.service.FoodService;
 @Service
 public class FoodServiceImpl implements FoodService {
 
-	private final FoodRepository foodRepo;
-	private final FoodLimitRepository foodLimitRepo;
+	private final FoodRepository foodRepo; // 操作 food 資料表
+	private final FoodLimitRepository foodLimitRepo; // 操作 food_limit 限量表
 
 	public FoodServiceImpl(FoodRepository foodRepo, FoodLimitRepository foodLimitRepo) {
 		this.foodRepo = foodRepo;
 		this.foodLimitRepo = foodLimitRepo;
 	}
 
+	// 計算每日蛋白質攝取目標
 	@Override
 	public double calculateProteinTarget(double weightKg, String level) {
 		return switch (level) {
@@ -35,41 +36,43 @@ public class FoodServiceImpl implements FoodService {
 		};
 	}
 
+	// 建議食物清單，依蛋白質需求與是否為素食篩選
 	@Override
 	public List<Map<String, Object>> getSuggestions(double targetProtein, boolean isVegan) {
+		// 取得食物資料，若是素食者則只取素食
 		List<Food> foods = isVegan ? foodRepo.findByIsVegan(true) : foodRepo.findAll();
 
-		// 1️⃣ 類別排序權重設定（數字越小，優先度越高）
+		// 設定類別的建議順序（數字越小優先）
 		Map<String, Integer> categoryPriority = Map.of("肉類", 1, "魚類", 2, "蛋類", 3, "豆類", 4, "乳製品", 5, "堅果", 6, "穀類", 7);
 
-		// 2️⃣ 多條件排序：先比類別優先，再比蛋白質含量
+		// 排序邏輯：先依類別排序，再依蛋白質高低排序
 		foods.sort((a, b) -> {
 			int p1 = categoryPriority.getOrDefault(a.getCategory(), 99);
 			int p2 = categoryPriority.getOrDefault(b.getCategory(), 99);
-			if (p1 != p2) {
-				return Integer.compare(p1, p2); // 先比類別
-			}
-			return Double.compare(b.getProteinPer100g(), a.getProteinPer100g()); // 再比蛋白質含量
+			if (p1 != p2)
+				return Integer.compare(p1, p2);
+			return Double.compare(b.getProteinPer100g(), a.getProteinPer100g());
 		});
 
-		// ✅ 新增這段：每類別內打亂順序，讓每次建議都不同
+		// 每類別內食物打亂，增加多樣性
 		Map<String, List<Food>> grouped = new HashMap<>();
 		for (Food food : foods) {
 			grouped.computeIfAbsent(food.getCategory(), k -> new ArrayList<>()).add(food);
 		}
 		foods.clear();
-		grouped.forEach((category, foodList) -> {
-			Collections.shuffle(foodList); // 每類內隨機
-			foods.addAll(foodList); // 加回主清單
+		grouped.forEach((category, list) -> {
+			Collections.shuffle(list);
+			foods.addAll(list);
 		});
 
+		// 開始組合建議清單
 		List<Map<String, Object>> result = new ArrayList<>();
 		Map<String, Integer> categoryCount = new HashMap<>();
 		double remaining = targetProtein;
 
 		for (Food food : foods) {
 			if (remaining <= 0)
-				break;
+				break; // 達標即結束
 
 			double proteinPer100g = food.getProteinPer100g();
 			if (proteinPer100g <= 0)
@@ -77,20 +80,23 @@ public class FoodServiceImpl implements FoodService {
 
 			String category = food.getCategory();
 			if (categoryCount.getOrDefault(category, 0) >= 1)
-				continue; // 每類最多推薦 1 種
+				continue; // 每類限一種
 			categoryCount.put(category, 1);
 
+			// 查詢該食物的最大建議攝取量（g）
 			var limitOpt = foodLimitRepo.findByFoodId(food.getId());
 			double maxPortion = limitOpt.map(FoodLimit::getMaxPortionG).orElse(120.0);
 
+			// 根據蛋白質目標，計算建議份量（g）
 			double suggestedPortion = (remaining / proteinPer100g) * 100;
 			double portion = Math.min(suggestedPortion, maxPortion);
 			double protein = (proteinPer100g * portion) / 100;
 
-			// 🧤 過濾蛋白質為 0 或建議攝取量太少的食物（如 portion < 10g）
+			// 若份量太少或蛋白質為 0，略過
 			if (portion < 10 || protein <= 0)
 				continue;
 
+			// 組成單筆建議項目
 			Map<String, Object> item = new HashMap<>();
 			item.put("name", food.getName());
 			item.put("amount_g", Math.round(portion));
@@ -100,12 +106,13 @@ public class FoodServiceImpl implements FoodService {
 			item.put("protein_per_100g", proteinPer100g);
 
 			result.add(item);
-			remaining -= protein;
+			remaining -= protein; // 減去已建議的蛋白質量
 		}
 
 		return result;
 	}
 
+	// 根據蛋白質需求產生三餐建議（平均分配）
 	@Override
 	public Map<String, List<Map<String, Object>>> getMealPlan(double targetProtein, boolean isVegan) {
 		double perMealTarget = targetProtein / 3;

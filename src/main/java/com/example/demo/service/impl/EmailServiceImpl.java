@@ -18,22 +18,26 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class EmailServiceImpl implements EmailService {
 
+	// 寄信用 Gmail 帳密（建議用環境變數保護）
 	private final String googleAppPassword = "ydgw dfai heiz qxqa";
 	private final String from = "foreverlove0512t@gmail.com";
 
-	@Value("${app.base-url}")
-	private String baseUrl; // ✅ 自動注入網址
+	@Value("${app.base-url}") // 注入 application.properties 設定的 base URL
+	private String baseUrl;
 
+	// 寄送帳號註冊驗證信
 	@Override
 	public void sendEmail(String to, String username) {
 		String confirmUrl = baseUrl + "/rest/health/email/confirm?username=" + username;
 
+		// 設定 Gmail SMTP 屬性
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
 
+		// 建立寄信 Session（認證用 app 密碼）
 		Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(from, googleAppPassword);
@@ -41,23 +45,25 @@ public class EmailServiceImpl implements EmailService {
 		});
 
 		try {
+			// 建立信件
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.setSubject("《體重與健康AI追蹤系統》會員註冊確認信");
 
+			// 信件內容（HTML格式）
 			String html = buildVerificationEmail(username, confirmUrl);
-			System.out.println("📧 信件內容 HTML：\n" + html);
+			System.out.println("信件內容 HTML：\n" + html);
 			message.setContent(html, "text/html; charset=utf-8");
 
 			Transport.send(message);
-			System.out.println("✅ 驗證信寄出：" + to);
+			System.out.println("驗證信寄出：" + to);
 		} catch (MessagingException e) {
-			System.out.println("❌ 寄送失敗：" + e.getMessage());
+			System.out.println("寄送失敗：" + e.getMessage());
 		}
 	}
 
-	// ✅ 客製化信件樣板
+	// 建立註冊驗證信的 HTML 樣板
 	private String buildVerificationEmail(String username, String confirmUrl) {
 		return """
 				<!DOCTYPE html>
@@ -82,7 +88,7 @@ public class EmailServiceImpl implements EmailService {
 
 	}
 
-	// EmailServiceImpl.java 補充方法
+	// 寄送忘記密碼用的驗證碼
 	public void sendResetCode(String to, String code) {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -106,12 +112,13 @@ public class EmailServiceImpl implements EmailService {
 			message.setContent(html, "text/html; charset=utf-8");
 
 			Transport.send(message);
-			System.out.println("✅ 忘記密碼驗證碼已寄出：" + to);
+			System.out.println("忘記密碼驗證碼已寄出：" + to);
 		} catch (MessagingException e) {
-			System.out.println("❌ 寄送失敗：" + e.getMessage());
+			System.out.println("寄送失敗：" + e.getMessage());
 		}
 	}
 
+	// 忘記密碼驗證碼的 HTML 樣板
 	private String buildResetCodeEmail(String code) {
 		return """
 				<!DOCTYPE html>
