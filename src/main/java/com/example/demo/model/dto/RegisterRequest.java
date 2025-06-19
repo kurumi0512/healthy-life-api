@@ -1,6 +1,6 @@
 package com.example.demo.model.dto;
 
-// 自訂驗證註解（下一步會建立）
+// 自訂驗證註解
 import com.example.demo.validator.PasswordsMatch;
 
 import jakarta.validation.constraints.Email;
@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// 使用者註冊請求資料物件，含基本欄位與驗證規則
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
