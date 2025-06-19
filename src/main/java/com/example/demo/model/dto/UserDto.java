@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// 前台個人頁面專用 DTO
+// 整合 User 表（個人資料）+ Account 表（帳號資訊）
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//前台個人頁面（個人檔案）
-//回傳綜合使用者資訊	
-//整合 User 表 + Account 表
 
 public class UserDto {
 	private Integer id; // User 表的主鍵
