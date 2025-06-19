@@ -22,21 +22,26 @@ public class ProfileController {
 	@Autowired
 	private UserProfileService userProfileService;
 
-	// 取得目前使用者的個人資料
+	// [GET] 取得目前使用者的個人資料
 	@GetMapping
 	public ResponseEntity<UserProfileDto> getProfile(HttpSession session) {
+		// 從 session 中取得目前登入者的帳號 ID（accountId）
 		Integer accountId = (Integer) session.getAttribute("accountId"); // 從 session 中取得登入者的 accountId
 
+		// 呼叫 service 查詢並回傳該使用者的個人資料（DTO 格式）
 		return ResponseEntity.ok(userProfileService.getProfile(accountId));
-		// 呼叫 userProfileService.getProfile(accountId)
-		// 去資料庫查詢對應的個人資料
 	}
 
-	// 接收前端送來的資料並更新該使用者的個人檔案
+	// [PUT] 更新使用者個人資料（接收前端送來的 JSON 資料）
 	@PutMapping
 	public ResponseEntity<?> updateProfile(@RequestBody UserProfileDto dto, HttpSession session) {
+		// 從 session 中取得目前登入者的帳號 ID
 		Integer accountId = (Integer) session.getAttribute("accountId");
+
+		// 呼叫 service 更新該使用者的資料
 		userProfileService.updateProfile(accountId, dto);
+
+		// 回傳空成功回應（狀態碼 200 OK）
 		return ResponseEntity.ok().build();
 	}
 }
