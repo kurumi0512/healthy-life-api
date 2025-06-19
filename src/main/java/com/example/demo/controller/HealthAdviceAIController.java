@@ -34,93 +34,77 @@ public class HealthAdviceAIController {
 	@Autowired
 	private AdviceHistoryRepository adviceHistoryRepository;
 
-	@Autowired // 註冊的 ChatClient
+	@Autowired // Spring AI 的聊天元件（串接 AI）
 	private ChatClient chatClient;
 
 	@Autowired
 	private UserRepository userRepository;
 
-	// 告訴前端這是「SSE串流格式」的回應
-	// 單向串流通訊技術，讓「伺服器主動把資料持續推送給前端瀏覽器
+	// [GET] 串流取得 AI 健康建議（Server-Sent Events 格式）
+	// 前端會逐句接收到建議內容 → 可即時顯示在畫面上
+	// 產生完成後會自動儲存建議到資料庫
 	@GetMapping(value = "/advice-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter getAdviceStream(@RequestParam double height, @RequestParam double weight, @RequestParam int age,
-			@RequestParam String goal, @RequestParam(defaultValue = "goal") String mode, // ✅ 新增
-			HttpSession session) {
+			@RequestParam String goal, @RequestParam(required = false) String mode, HttpSession session) {
 
-		String prompt = healthAdviceService.generatePrompt(height, weight, age, goal, mode);
+		// 產生 prompt：如果沒帶 mode，就用預設的完整建議；否則依 mode 模式產生
+		String prompt = (mode == null || mode.isBlank()) ? healthAdviceService.generatePrompt(height, weight, age, goal)
+				: healthAdviceService.generatePrompt(height, weight, age, goal, mode);
 
 		SseEmitter emitter = new SseEmitter(0L); // 0L 表示永不超時
-		final boolean[] insideThinkBlock = { false };
+		final boolean[] insideThinkBlock = { false }; // 用來判斷 AI 是否進入 <think> 區段
 
 		// 用來累積完整建議文字
-		StringBuilder fullAdvice = new StringBuilder();
+		StringBuilder fullAdvice = new StringBuilder(); // 累積整段建議內容（用來儲存）
 
-		chatClient.prompt()
-				.system("""
-						你是一位健康建議助理，請直接以繁體中文回覆下列內容，**禁止輸出任何 <think> 或思考過程的內容。**
+		// 呼叫 AI 並啟用串流回覆
+		chatClient.prompt().user(prompt).stream().content().subscribe(message -> { // 用 Spring AI 的 ChatClient 呼叫 AI
+			// .stream().content().subscribe(...)：進入 串流模式，逐句接收 AI 的回覆。
+			try {
+				System.out.println("AI 回傳片段：" + message);
 
-								使用者 %d 歲，身高 %.1f 公分，體重 %.1f 公斤，BMI 為 %.1f，目標：%s。
+				// 檢查是否應該顯示這段訊息（例如排除 <think> 區塊）
+				if (message != null && !message.trim().isEmpty()
+						&& healthAdviceService.shouldDisplayWord(message, insideThinkBlock)) {
 
-								請提供簡潔明確的「飲食建議」與「運動建議」，回覆請依照以下格式列出，每一段開頭請加上「•」，段落之間請換行（不要連在一起），內容請使用 Markdown 格式，總字數限制在 500 字以內，語氣請自然、像台灣人在說話。
+					// 美化訊息：加換行讓段落清晰
+					String cleanMsg = message.trim().replace("•", "\n•") // 小黑點前加換行
+							.replaceAll("\n", "\n\n"); // 將單換行變雙換行讓段落更清晰
 
-								請依以下順序提供內容：
-								1. 根據 BMI 給出每日建議攝取熱量（大卡）區間
-								2. 建議每日飲水量（毫升）
-								3. 飲食建議：列出幾項主要原則與建議食材（包含澱粉、蛋白質、蔬菜等）
-								4. 運動建議：提供簡單、好執行的日常運動與建議時間
+					fullAdvice.append(cleanMsg); // 累積完整建議內容
+					emitter.send(cleanMsg); // 推送給前端顯示
+				}
+			} catch (IOException e) {
+				emitter.completeWithError(e); // 若出錯，終止串流
+			}
+		}, error -> {
+			emitter.completeWithError(error); // 若 AI 發生錯誤，終止串流
+		}, () -> {
+			try {
+				emitter.send("[DONE]"); // 通知前端串流已完成
+				emitter.complete(); // 關閉串流
 
-								**請只輸出建議內容，不要加入 <think>、開場白、或其他說明**
-
-						""")
-				.user(prompt).stream().content().subscribe(message -> { // 用 Spring AI 的 ChatClient 呼叫 AI
-					// .stream().content().subscribe(...)：進入 串流模式，逐句接收 AI 的回覆。
-					try {
-						System.out.println("✅ AI 回傳片段：" + message);
-
-						if (message != null && !message.trim().isEmpty()
-								&& healthAdviceService.shouldDisplayWord(message, insideThinkBlock)) {
-
-							// 過濾 AI 偷輸出的開場白或雜訊
-							String cleanMsg = message.trim().replace("•", "\n•") // 小黑點前加換行
-									.replaceAll("\n", "\n\n"); // 將單換行變雙換行讓段落更清晰
-
-							fullAdvice.append(cleanMsg); // 加入完整建議內容
-							emitter.send(cleanMsg); // 送出這段格式化後的內容到前端
-						}
-					} catch (IOException e) {
-						emitter.completeWithError(e);
+				// 串流完成後，儲存建議紀錄
+				UserCert cert = (UserCert) session.getAttribute("cert"); // 從 session 取得登入資訊
+				if (cert != null) {
+					User user = userRepository.findByAccount_Id(cert.getAccountId()).orElse(null);
+					if (user != null) {
+						// 儲存 prompt 與 AI 回覆
+						healthAdviceService.saveAdviceRecord(user.getId(), prompt, fullAdvice.toString());
+					} else {
+						System.out.println("找不到對應的使用者");
 					}
-				}, error -> {
-					emitter.completeWithError(error);
-				}, () -> {
-					try {
-						emitter.send("[DONE]"); // 表示串流結束，通知前端不再送新資料
-						emitter.complete();
-
-						// 串流完成後儲存到資料庫
-						UserCert cert = (UserCert) session.getAttribute("cert");
-						if (cert != null) {
-							User user = userRepository.findByAccount_Id(cert.getAccountId()).orElse(null);// 從 Session
-																											// 取出登入使用者資訊（UserCert
-																											// 是自訂的登入資訊）
-							if (user != null) {
-								healthAdviceService.saveAdviceRecord(user.getId(), prompt, fullAdvice.toString()); // 將建議內容（prompt
-																													// +
-																													// 回覆）儲存進資料庫，對應到使用者
-							} else {
-								System.out.println("⚠️ 找不到對應的使用者");
-							}
-						} else {
-							System.out.println("⚠️ 無登入資訊，略過儲存建議紀錄");
-						}
-					} catch (IOException e) {
-						emitter.completeWithError(e);
-					}
-				});
+				} else {
+					System.out.println("無登入資訊，略過儲存建議紀錄");
+				}
+			} catch (IOException e) {
+				emitter.completeWithError(e);
+			}
+		});
 		return emitter;
 	}
 
-	@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+	// [GET] 取得目前使用者的最新一筆 AI 健康建議（for 歷史紀錄）
 	@GetMapping("/history/latest")
 	public ApiResponse<?> getLatestAdvice(HttpSession session) {
 		UserCert cert = (UserCert) session.getAttribute("cert");
@@ -128,19 +112,20 @@ public class HealthAdviceAIController {
 			return ApiResponse.error("未登入，無法取得歷史建議");
 		}
 
-		// 用 accountId 找到對應的 User（注意不是用 cert.getAccountId() 當 userId）
+		// 根據帳號 ID 找到對應的使用者
 		User user = userRepository.findByAccount_Id(cert.getAccountId()).orElse(null);
 		if (user == null) {
 			return ApiResponse.error("找不到對應的使用者");
 		}
 
-		// 用正確 user.id 查詢歷史紀錄
+		// 查詢該使用者最新一筆建議紀錄
 		AdviceHistory latest = adviceHistoryRepository.findTopByUser_IdOrderByCreatedAtDesc(user.getId());
 
 		if (latest == null) {
 			return ApiResponse.success("尚無建議紀錄", null);
 		}
 
+		// 回傳建議內容：包含使用者輸入的 prompt、AI 回覆、與產生時間
 		return ApiResponse.success("查詢成功", Map.of("inputContext", latest.getInputContext(), "generatedAdvice",
 				latest.getGeneratedAdvice(), "createdAt", latest.getCreatedAt()));
 	}
