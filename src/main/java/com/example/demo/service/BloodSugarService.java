@@ -4,23 +4,25 @@ import java.util.List;
 
 import com.example.demo.model.dto.BloodSugarRecordDTO;
 
+//血糖紀錄相關功能的服務層介面
 public interface BloodSugarService {
 
-	// 改成接收 DTO（由 Controller 傳入）
+	// 儲存一筆血糖紀錄（接收來自 Controller 的 DTO）
 	void save(BloodSugarRecordDTO dto);
 
-	// 改成回傳 DTO（回傳給前端）
-	List<BloodSugarRecordDTO> findByUserId(Integer accountId); // 查某帳號的所有紀錄
+	// 查詢某帳號的所有血糖紀錄（依記錄日期排序）
+	List<BloodSugarRecordDTO> findByUserId(Integer accountId);
 
-	List<BloodSugarRecordDTO> findRecentByUserId(Integer accountId, int limit); // 查近 n 筆紀錄
+	// 查詢某帳號最近 n 筆血糖紀錄（依記錄日期由新到舊）
+	List<BloodSugarRecordDTO> findRecentByUserId(Integer accountId, int limit);
 
-	BloodSugarRecordDTO findById(Integer id); // 查單筆（用於前端編輯畫面）
+	// 查詢單筆血糖紀錄（用於前端載入編輯用）
+	BloodSugarRecordDTO findById(Integer id);
 
+	// 刪除指定的血糖紀錄
 	void delete(Integer id);
 
+	// 查詢某帳號最新一筆血糖紀錄（記錄日期最新，用於預設值）
 	BloodSugarRecordDTO findLatestByUserId(Integer accountId);
 
-	// 範例：條件查詢（保留）
-	// List<BloodSugarRecordDTO> findByUserIdAndDateRange(Integer userId, LocalDate
-	// startDate, LocalDate endDate);
 }
