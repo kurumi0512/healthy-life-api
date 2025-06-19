@@ -36,24 +36,23 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/rest/health")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
-//負責帳號註冊、登入、登出、驗證與查詢登入狀態的控制器（Controller）
+//處理註冊/登入/登出/email認證/忘記密碼
 public class AuthController {
 
-	@Autowired // 登入驗證（Login）
-	private AuthServiceImpl authService;
+	@Autowired
+	private AuthServiceImpl authService; // 登入驗證服務
 
 	@Autowired
-	private AccountService accountService; // 帳號管理（註冊、啟用帳號）
+	private AccountService accountService; // 帳號管理 (註冊 / 啟用 / 忘記密碼)
 
 	@Autowired
-	private EmailServiceImpl emailService; // email認證
+	private EmailServiceImpl emailService; // email發送服務
 
 	@Autowired
-	private UserService userService; // 查詢使用者
+	private UserService userService; // 用戶資料管理
 
-	// 登入
-	@PostMapping("/register") // @Valid欄位驗證,BindingResult會接收這些驗證檢查的結果 //HttpSession 專門幫某一位使用者存資料
-	// ResponseEntity<?>表示 HTTP 回應的泛型
+	// 註冊: 接收 JSON, 表單驗證 -> 註冊成功 -> 發送認證信 -> 自動登入
+	@PostMapping("/register") // @Valid欄位驗證,BindingResult會接收這些驗證檢查的結果
 	public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult,
 			HttpSession session) {
 
@@ -64,7 +63,7 @@ public class AuthController {
 		}
 
 		// 檢查帳號是否已存在
-		// 409 Conflict：伺服器無法完成請求，因為請求內容與目前的資源狀態衝突
+		// 409 Conflict：伺服器無法完成請求，請求內容與目前的資源狀態衝突
 		if (accountService.isUsernameTaken(request.getUsername())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "帳號已存在"));
 		}
@@ -77,7 +76,7 @@ public class AuthController {
 
 		// 發送驗證信
 		String confirmUrl = "http://localhost:8082/rest/health/email/confirm?username=" + request.getUsername();
-		emailService.sendEmail(request.getEmail(), request.getUsername()); // ✅ 正確：傳入純 username
+		emailService.sendEmail(request.getEmail(), request.getUsername());
 
 		// 回傳訊息與登入資料
 		return ResponseEntity.ok(Map.of("message", "註冊成功，請至信箱驗證帳號", "user", request.getUsername()));
@@ -94,8 +93,7 @@ public class AuthController {
 		}
 	}
 
-	// 接收 JSON 格式的登入資料
-	// 登入時驗證 session 中的驗證碼
+	// 登入: 驗證表單 + 驗證碼 + 密碼驗證
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, BindingResult result,
 			HttpSession session) {
@@ -125,12 +123,14 @@ public class AuthController {
 		}
 	}
 
+	// 登出: 刪除 Session
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpSession session) {
 		session.invalidate(); // 清空 session,清空登入狀態
 		return ResponseEntity.ok(Map.of("message", "已登出"));
 	}
 
+	// 返回當前登入用戶資訊
 	@GetMapping("/user")
 	// 從 session 中取出認證物件 UserCert
 	public ResponseEntity<?> currentUser(HttpSession session) {
@@ -145,7 +145,7 @@ public class AuthController {
 		}
 	}
 
-	// 用 accountId 和 username 檢查是否還在登入狀態
+	// 檢查是否還在登入狀態 (session存在即為登入)
 	@GetMapping("/check")
 	public ResponseEntity<LoginCheckResponse> checkLogin(HttpSession session) {
 		Integer accountId = (Integer) session.getAttribute("accountId");
@@ -172,37 +172,42 @@ public class AuthController {
 		return ResponseEntity.ok(dto);
 	}
 
-	// 取出帳號資料（AccountResponseDTO）,前台個人頁面
+	// 取出目前登入帳號的基本資訊（供前台個人頁面顯示）
 	@GetMapping("/account/profile")
 	public ResponseEntity<AccountResponseDTO> getAccountProfile(HttpSession session) {
+		// 從 Session 中取得登入的帳號 ID
 		Integer accountId = (Integer) session.getAttribute("accountId");
 		if (accountId == null) {
+			// 尚未登入，回傳 401 未授權
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 		}
 
-		// 不直接回傳實體 Account，而是轉成精簡、對前端友善的 DTO，避免暴露敏感欄位（例如密碼、鹽值）
+		// 查詢帳號資料（不回傳實體 Account 以避免洩漏敏感資訊）
 		Account account = accountService.findById(accountId);
 		AccountResponseDTO dto = AccountMapper.toResponseDTO(account);
-		return ResponseEntity.ok(dto);
+		return ResponseEntity.ok(dto); // 回傳 DTO
 	}
 
+	// 第一步：使用者填寫信箱，系統寄出重設密碼的驗證碼
 	@PostMapping("/forgot-password/send")
 	public ResponseEntity<?> sendResetCode(@RequestBody Map<String, String> body) {
 		String email = body.get("email");
 		try {
-			accountService.sendResetCode(email); // 呼叫剛剛建立的 Service 方法
+			accountService.sendResetCode(email); // 呼叫 Service 寄出驗證碼
 			return ResponseEntity.ok(Map.of("message", "驗證碼已寄出，請至信箱查收"));
 		} catch (Exception e) {
+			// 若寄送過程失敗（例如：找不到信箱、SMTP 錯誤）
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "寄送失敗：" + e.getMessage()));
 		}
 	}
 
+	// 第二步：使用者輸入收到的驗證碼，伺服器驗證是否正確
 	@PostMapping("/forgot-password/verify")
 	public ResponseEntity<?> verifyResetCode(@RequestBody Map<String, String> body) {
 		String email = body.get("email");
 		String code = body.get("code");
 
-		boolean valid = accountService.verifyResetCode(email, code);
+		boolean valid = accountService.verifyResetCode(email, code); // 驗證驗證碼是否正確與有效
 		if (valid) {
 			return ResponseEntity.ok(Map.of("message", "驗證成功，請輸入新密碼"));
 		} else {
@@ -210,15 +215,17 @@ public class AuthController {
 		}
 	}
 
+	// 第三步：使用者輸入新密碼，完成重設
 	@PostMapping("/forgot-password/reset")
 	public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> body) {
 		String email = body.get("email");
 		String newPassword = body.get("newPassword");
 
 		try {
-			accountService.resetPassword(email, newPassword);
+			accountService.resetPassword(email, newPassword); // 儲存新密碼（通常需進行加密）
 			return ResponseEntity.ok(Map.of("message", "密碼已成功重設"));
 		} catch (Exception e) {
+			// 例外情況，例如帳號不存在或資料庫錯誤
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "密碼重設失敗：" + e.getMessage()));
 		}
 	}

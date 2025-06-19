@@ -23,8 +23,8 @@ public class CheckNotesAspect {
 				Object notesValue = getNotesMethod.invoke(arg);
 
 				if (notesValue instanceof String notesStr) {
-					// ✅👉 加在這裡！印出目前檢查的備註內容
-					System.out.println("🔍 AOP 正在檢查 notes: " + notesStr);
+					// 印出目前檢查的備註內容
+					System.out.println("AOP 正在檢查 notes: " + notesStr);
 
 					// 髒話判斷
 					if (BadWordFilter.containsBadWord(notesStr)) {

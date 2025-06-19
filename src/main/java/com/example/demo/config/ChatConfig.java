@@ -4,18 +4,14 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration // 標示這是一個 Spring 的組態類別，會被容器掃描並建立 Bean
 public class ChatConfig {
 
-	// 此物件是被 Spring 管理, 其他程式可以透過 @Autowired 自動綁定來取得該物件(不需要 new)
-	// 用在HealthAdviceAIController ,AI建議
-
-	// 把「設定好的 Builder」轉成「真正的 ChatClient 實體」
-	// 是 Builder 模式的標準做法
+	// 建立 ChatClient Bean，供 AI 建議用（如 HealthAdviceAIController 注入使用）
 
 	@Bean
 	public ChatClient chatClient(ChatClient.Builder builder) {
-		return builder.build();
+		return builder.build(); // 將設定完成的 Builder 組裝成 ChatClient 實體
 	}
 
 }
